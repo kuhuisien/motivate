@@ -1,15 +1,44 @@
 {
-  "name": "learn-starter",
+  "name": "motivate",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "jest",
+    "test:watch": "npm run test -o",
+    "test:coverage": "npm run test -- --coverage --watchAll=false"
   },
   "dependencies": {
-    "next": "^10.0.0",
-    "react": "17.0.1",
-    "react-dom": "17.0.1"
+    "@ant-design/icons": "^4.6.2",
+    "antd": "^4.8.6",
+    "next": "10.2.3",
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.3",
+    "@babel/preset-env": "^7.14.4",
+    "@testing-library/dom": "^7.31.2",
+    "@testing-library/jest-dom": "^5.13.0",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/react-hooks": "^7.0.0",
+    "@types/enzyme": "^3.10.8",
+    "@types/react": "^17.0.9",
+    "@types/react-dom": "^17.0.6",
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.1",
+    "babel-jest": "^27.0.2",
+    "babel-loader": "^8.2.2",
+    "babel-plugin-macros": "^3.1.0",
+    "enzyme": "^3.11.0",
+    "jest": "^27.0.4",
+    "jest-dom": "^4.0.0",
+    "jest-junit": "^12.1.0",
+    "jsdom": "16.6.0",
+    "jsdom-global": "3.0.2",
+    "ts-nameof.macro": "^4.2.2",
+    "typescript": "^4.3.2",
+    "webpack": "^5.38.1"
   }
 }
