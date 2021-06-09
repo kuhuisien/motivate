@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import classes from "styles/Signup.module.css";
-import { Form } from "antd";
+import { Form, Typography } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import TextField from "components/FormInputs/TextField/TextField";
 import SubmitButton from "components/Buttons/SubmitButton/SubmitButton";
@@ -9,25 +9,30 @@ import { signup } from "api-client/auth/signup";
 const Signup = () => {
   const [form] = Form.useForm();
 
+  // States for the form submission API call
+  const [submitIsLoading, setSubmitIsLoading] = useState(false);
+  const [submitErrorMessage, setSubmitErrorMessage] = useState<string | null>(
+    null
+  );
+
   const onFinish = async (values: any) => {
     try {
+      setSubmitErrorMessage(null);
+      setSubmitIsLoading(true);
       console.log("Received values of form: ", values);
       const { email, password } = values;
       const response = await signup(email, password);
       console.log(response);
     } catch (error) {
-      console.log(error);
+      setSubmitErrorMessage(error.message);
+    } finally {
+      setSubmitIsLoading(false);
     }
-  };
-
-  const onFormValueChange = (changedValues: any, values: any) => {
-    //console.log(changedValues);
-    //console.log(values);
   };
 
   return (
     <div className={classes.container}>
-      <Form form={form} onFinish={onFinish} onValuesChange={onFormValueChange}>
+      <Form form={form} onFinish={onFinish}>
         <TextField
           prefix={<UserOutlined />}
           placeholder="Email"
@@ -53,7 +58,11 @@ const Signup = () => {
           dependency="password"
         ></TextField>
 
-        <SubmitButton>SIGN UP</SubmitButton>
+        <SubmitButton loading={submitIsLoading}>SIGN UP</SubmitButton>
+
+        {submitErrorMessage && (
+          <Typography.Text type="danger">{submitErrorMessage}</Typography.Text>
+        )}
       </Form>
     </div>
   );
