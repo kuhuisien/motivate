@@ -18,5 +18,6 @@ interface FormWrapperProps {
  * @returns Provider wrapper component for convenient unit testing
  */
 export const FormProvidersWrapper = ({ children }: FormWrapperProps) => {
-  return <Form>{children}</Form>;
+  const [form] = Form.useForm();
+  return <Form form={form}>{children}</Form>;
 };

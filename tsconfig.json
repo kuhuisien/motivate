@@ -2,7 +2,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -20,7 +24,10 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "lib/customHooks/use-isomorphic-layout-effect.js"
+    "lib/customHooks/use-isomorphic-layout-effect.js",
+    "pages/api/auth/signup.js"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

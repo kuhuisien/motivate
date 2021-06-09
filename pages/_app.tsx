@@ -1,10 +1,14 @@
 import "../styles/globals.css";
 import { Layout } from "antd";
 import AppNavigationBar from "../components/AppNavigationBar/AppNavigationBar";
+import type { AppProps } from "next/app";
+import { initializeFirebase } from "lib/firebase/setup";
+
+initializeFirebase();
 
 const { Header, Content } = Layout;
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Layout>
       <Header className="header">

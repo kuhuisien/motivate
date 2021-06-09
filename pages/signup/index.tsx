@@ -1,58 +1,52 @@
-import React, { useState } from "react";
-import styles from "styles/Signup.module.css";
-import { SignupFormFieldState } from "lib/types/pages/signup.types";
-import nameof from "ts-nameof.macro";
-import { Space } from "antd";
+import React from "react";
+import classes from "styles/Signup.module.css";
+import { Form } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import TextField from "components/FormInputs/TextField/TextField";
-import SimpleButton from "components/SimpleButton/SimpleButton";
+import SubmitButton from "components/Buttons/SubmitButton/SubmitButton";
 
 const Signup = () => {
-  const [signupFormField, setSignupFormField] = useState<SignupFormFieldState>({
-    email: null,
-    password: null,
-    repeatedPassword: null,
-  });
+  const [form] = Form.useForm();
 
-  const handleSignupChange = (event: {
-    target: { name: string; value: string };
-  }) => {
-    const { name, value } = event.target;
-    const updatedSignupFormField = { ...signupFormField, [name]: value };
-    setSignupFormField(updatedSignupFormField);
+  const onFinish = (values: any) => {
+    console.log("Received values of form: ", values);
+  };
+
+  const onFormValueChange = (changedValues: any, values: any) => {
+    //console.log(changedValues);
+    //console.log(values);
   };
 
   return (
-    <div className={styles.container}>
-      <Space direction="vertical">
+    <div className={classes.container}>
+      <Form form={form} onFinish={onFinish} onValuesChange={onFormValueChange}>
         <TextField
           prefix={<UserOutlined />}
           placeholder="Email"
-          name={nameof(signupFormField.email)}
-          value={signupFormField.email}
-          onChange={handleSignupChange}
+          name={"email"}
+          type="email"
         ></TextField>
 
         <TextField
           prefix={<LockOutlined />}
           placeholder="Password"
-          name={nameof(signupFormField.email)}
-          value={signupFormField.password}
+          name="password"
           type="password"
-          onChange={handleSignupChange}
+          pattern="^(?=.*[A-Za-z])(?=.*\d).{8,}$"
+          patternValMsg="minimum eight characters, at least one letter and one number"
         ></TextField>
 
         <TextField
           prefix={<LockOutlined />}
-          placeholder="Repeat password"
-          name={nameof(signupFormField.email)}
-          value={signupFormField.repeatedPassword}
+          placeholder="Repeated password"
+          name="repeatedPassword"
+          requiredValMsg="confirm password"
           type="password"
-          onChange={handleSignupChange}
+          dependency="password"
         ></TextField>
 
-        <SimpleButton text="SIGN UP" onClick={() => {}}></SimpleButton>
-      </Space>
+        <SubmitButton>SIGN UP</SubmitButton>
+      </Form>
     </div>
   );
 };

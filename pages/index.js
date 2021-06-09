@@ -1,7 +1,5 @@
 import Head from "next/head";
 import styles from "styles/Home.module.css";
-import { Button } from "antd";
-import TextField from "../components/FormInputs/TextField/TextField";
 
 export default function Home() {
   return (
@@ -14,7 +12,6 @@ export default function Home() {
 
       <h1>Welcome :)</h1>
       {/* <Button type="primary">Primary Button</Button> */}
-      <TextField placeholder={"test"} onChange={() => {}}></TextField>
     </div>
   );
 }

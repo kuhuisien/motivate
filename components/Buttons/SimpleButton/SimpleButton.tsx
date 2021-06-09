@@ -3,22 +3,26 @@ import { SimpleButtonProps } from "./SimpleButton.types";
 import { Button } from "antd";
 
 const SimpleButton = ({
-  text,
-  size,
-  icon,
-  loading = false,
+  children,
+  htmlType = "button",
   type = "primary",
+  size = "middle",
+  loading = false,
+  disabled = false,
+  icon,
   onClick,
 }: SimpleButtonProps) => {
   return (
     <Button
+      htmlType={htmlType}
       type={type}
       size={size}
-      icon={icon}
       loading={loading}
-      onClick={() => onClick()}
+      disabled={disabled}
+      icon={icon}
+      onClick={onClick}
     >
-      {text}
+      {children}
     </Button>
   );
 };
