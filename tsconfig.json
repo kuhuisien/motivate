@@ -2,11 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -25,9 +21,8 @@
     "**/*.ts",
     "**/*.tsx",
     "lib/customHooks/use-isomorphic-layout-effect.js",
-    "pages/api/auth/signup.js"
+    "pages/api/auth/signup.tsx",
+    "components/Buttons/SubmitButton/__test__/SubmitButton.test.tsxs"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
