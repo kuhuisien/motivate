@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { hashText } from "lib/auth/auth";
 import firebase from "firebase/app";
 import "firebase/firestore";
+import { USERS_COLLECTION, EMAIL_FIELD } from "lib/firebase/constant";
 
 type Data = {
   message: string;
@@ -26,8 +27,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
     var hashedPassword = await hashText(password);
 
     // user validation to check if user provided email has been signed up before
-    const usersRef = firebase.firestore().collection("users");
-    const snapshot = await usersRef.where("email", "==", email).get();
+    const usersRef = firebase.firestore().collection(USERS_COLLECTION);
+    const snapshot = await usersRef
+      .where(EMAIL_FIELD, "==", email)
+      .limit(1)
+      .get();
     if (snapshot.empty) {
       const result = await usersRef.add({
         email,

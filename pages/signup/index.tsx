@@ -1,13 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import classes from "styles/Signup.module.css";
 import { Form, Typography } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import TextField from "components/FormInputs/TextField/TextField";
 import SubmitButton from "components/Buttons/SubmitButton/SubmitButton";
 import { signup } from "api-client/auth/signup";
+import { useSession } from "next-auth/client";
+import { routes } from "lib/nav/routes";
+import { useRouter } from "next/router";
 
 const Signup = () => {
+  const router = useRouter();
+
+  // prevent logged in user to access the page
+  const [session, loading] = useSession();
+  useEffect(() => {
+    if (session) {
+      router.replace(routes.home);
+    }
+  }, [session]);
+
   const [form] = Form.useForm();
+
+  const formFieldNames = {
+    email: "email",
+    password: "password",
+    repeatedPassword: "repeatedPassword",
+  };
 
   // States for the form submission API call
   const [submitIsLoading, setSubmitIsLoading] = useState(false);
@@ -19,8 +38,10 @@ const Signup = () => {
     try {
       setSubmitErrorMessage(null);
       setSubmitIsLoading(true);
-      console.log("Received values of form: ", values);
-      const { email, password } = values;
+
+      const email = values[formFieldNames.email];
+      const password = values[formFieldNames.password];
+
       const response = await signup(email, password);
       console.log(response);
     } catch (error) {
@@ -30,20 +51,24 @@ const Signup = () => {
     }
   };
 
+  if (loading) {
+    return null;
+  }
+
   return (
     <div className={classes.container}>
       <Form form={form} onFinish={onFinish}>
         <TextField
           prefix={<UserOutlined />}
           placeholder="Email"
-          name={"email"}
+          name={formFieldNames.email}
           type="email"
         ></TextField>
 
         <TextField
           prefix={<LockOutlined />}
           placeholder="Password"
-          name="password"
+          name={formFieldNames.password}
           type="password"
           pattern="^(?=.*[A-Za-z])(?=.*\d).{8,}$"
           patternValMsg="minimum eight characters, at least one letter and one number"
@@ -52,10 +77,10 @@ const Signup = () => {
         <TextField
           prefix={<LockOutlined />}
           placeholder="Repeated password"
-          name="repeatedPassword"
+          name={formFieldNames.repeatedPassword}
           requiredValMsg="confirm password"
           type="password"
-          dependency="password"
+          dependency={formFieldNames.password}
         ></TextField>
 
         <SubmitButton loading={submitIsLoading}>SIGN UP</SubmitButton>

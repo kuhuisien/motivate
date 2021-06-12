@@ -8,17 +8,21 @@ import {
 } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
+import { signOut, useSession } from "next-auth/client";
+import { routes } from "lib/nav/routes";
 
-// to be refined
 const NavItems: NavigationBarItem[] = [
-  { id: "/", text: "Habits", icon: <MailOutlined /> },
-  { id: "/dailies", text: "Dailies", icon: <AppstoreOutlined /> },
-  { id: "/todos", text: "To Do's", icon: <SettingOutlined /> },
-  { id: "/rewards", text: "Rewards", icon: <MailOutlined /> },
+  { id: routes.home, text: "Habits", icon: <MailOutlined /> },
+  { id: routes.dailies, text: "Dailies", icon: <AppstoreOutlined /> },
+  { id: routes.todos, text: "To Do's", icon: <SettingOutlined /> },
+  { id: routes.rewards, text: "Rewards", icon: <MailOutlined /> },
 ];
 
 const AppNavigationBar = () => {
   const selectedKey = useRouter().pathname;
+
+  const [session] = useSession();
 
   return (
     <Menu selectedKeys={[selectedKey]} mode="horizontal">
@@ -27,6 +31,11 @@ const AppNavigationBar = () => {
           <Link href={item.id}>{item.text}</Link>
         </Menu.Item>
       ))}
+      {session && (
+        <Menu.Item key={"logout"}>
+          <SimpleButton onClick={() => signOut()}>Logout</SimpleButton>
+        </Menu.Item>
+      )}
     </Menu>
   );
 };
