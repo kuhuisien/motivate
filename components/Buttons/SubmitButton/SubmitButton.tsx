@@ -2,6 +2,7 @@ import React from "react";
 import { Form } from "antd";
 import { SubmitButtonProps } from "./SubmitButton.types";
 import SimpleButton from "../SimpleButton/SimpleButton";
+import classes from "./SubmitButton.module.css";
 
 /**
  *
@@ -16,7 +17,7 @@ const SubmitButton = ({
   onClick,
 }: SubmitButtonProps) => {
   return (
-    <Form.Item shouldUpdate style={{ marginTop: 8 }}>
+    <Form.Item shouldUpdate className={classes.button}>
       {(form) => (
         <SimpleButton
           htmlType="submit"

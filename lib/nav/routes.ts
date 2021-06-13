@@ -2,7 +2,7 @@ export const routes = {
   home: "/",
   dailies: "/dailies",
   todos: "/todos",
-  rewards: "rewards",
+  rewards: "/rewards",
   signup: "/signup",
   login: "/login",
 };

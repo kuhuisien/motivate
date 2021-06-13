@@ -5,7 +5,7 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import TextField from "components/FormInputs/TextField/TextField";
 import SubmitButton from "components/Buttons/SubmitButton/SubmitButton";
 import { signup } from "api-client/auth/signup";
-import { useSession } from "next-auth/client";
+import { useSession, signin, signIn } from "next-auth/client";
 import { routes } from "lib/nav/routes";
 import { useRouter } from "next/router";
 
@@ -42,8 +42,22 @@ const Signup = () => {
       const email = values[formFieldNames.email];
       const password = values[formFieldNames.password];
 
-      const response = await signup(email, password);
-      console.log(response);
+      // sign up error handling is in catch block
+      // since failed signin will cause error to be thrown
+      await signup(email, password);
+
+      // direct sign in after successful sign up
+      const result = await signIn("credentials", {
+        redirect: false,
+        email: values[formFieldNames.email],
+        password: values[formFieldNames.password],
+      });
+
+      if (result?.error) {
+        setSubmitErrorMessage(result.error);
+      } else {
+        router.replace(routes.home);
+      }
     } catch (error) {
       setSubmitErrorMessage(error.message);
     } finally {
