@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
-import classes from "styles/Signup.module.css";
+import classes from "styles/Login.module.css";
 import { Form, Typography } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import TextField from "components/FormInputs/TextField/TextField";
@@ -78,6 +78,10 @@ const Login = () => {
         {submitErrorMessage && (
           <Typography.Text type="danger">{submitErrorMessage}</Typography.Text>
         )}
+
+        <SimpleButton onClick={() => signIn("google")}>
+          Sign in with Google
+        </SimpleButton>
 
         <div className={classes.button}>
           <SimpleButton type="text" onClick={() => router.push(routes.signup)}>

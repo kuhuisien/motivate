@@ -11,20 +11,10 @@ export default NextAuth({
     jwt: true,
   },
   providers: [
-    // OAuth authentication providers...
-    // Providers.Apple({
-    //   clientId: process.env.APPLE_ID,
-    //   clientSecret: process.env.APPLE_SECRET,
-    // }),
-    // Providers.Facebook({
-    //   clientId: process.env.FACEBOOK_ID,
-    //   clientSecret: process.env.FACEBOOK_SECRET,
-    // }),
-    // Providers.Google({
-    //   clientId: process.env.GOOGLE_ID,
-    //   clientSecret: process.env.GOOGLE_SECRET,
-    // }),
-    // Passwordless / email sign in
+    Providers.Google({
+      clientId: process.env.GOOGLE_ID,
+      clientSecret: process.env.GOOGLE_SECRET,
+    }),
     Providers.Credentials({
       async authorize(credentials: Record<string, string>, req) {
         const { email, password } = credentials;
