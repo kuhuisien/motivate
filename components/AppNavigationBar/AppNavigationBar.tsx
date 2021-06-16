@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu } from "antd";
+import { Menu, Typography } from "antd";
 import { NavigationBarItem } from "./AppNavigationBar.types";
 import {
   MailOutlined,
@@ -10,33 +10,66 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
 import { signOut, useSession } from "next-auth/client";
-import { routes } from "lib/nav/routes";
+import { PATHS } from "lib/nav/routes";
+import { retrievePath } from "lib/nav/retrievePath";
+import classes from "./AppNavigationBar.module.css";
 
 const NavItems: NavigationBarItem[] = [
-  { id: routes.home, text: "Habits", icon: <MailOutlined /> },
-  { id: routes.dailies, text: "Dailies", icon: <AppstoreOutlined /> },
-  { id: routes.todos, text: "To Do's", icon: <SettingOutlined /> },
-  { id: routes.rewards, text: "Rewards", icon: <MailOutlined /> },
+  {
+    id: PATHS.HABIT.path,
+    text: PATHS.HABIT.displayName,
+    icon: <MailOutlined />,
+  },
+  {
+    id: PATHS.DAILIES.path,
+    text: PATHS.DAILIES.displayName,
+    icon: <AppstoreOutlined />,
+  },
+  {
+    id: PATHS.TODOS.path,
+    text: PATHS.TODOS.displayName,
+    icon: <SettingOutlined />,
+  },
+  {
+    id: PATHS.REWARDS.path,
+    text: PATHS.REWARDS.displayName,
+    icon: <MailOutlined />,
+  },
 ];
 
 const AppNavigationBar = () => {
-  const selectedKey = useRouter().pathname;
+  const pathname = useRouter().pathname;
+  const path = retrievePath(pathname);
 
   const [session] = useSession();
 
+  const showMainNav =
+    pathname === PATHS.HOME.path ||
+    NavItems.find((n) => n.id == pathname) !== undefined;
+
+  const title = path?.displayName;
+
   return (
-    <Menu selectedKeys={[selectedKey]} mode="horizontal">
-      {NavItems.map((item) => (
-        <Menu.Item key={item.id} icon={item.icon}>
-          <Link href={item.id}>{item.text}</Link>
-        </Menu.Item>
-      ))}
-      {session && (
-        <Menu.Item key={"logout"}>
-          <SimpleButton onClick={() => signOut()}>Logout</SimpleButton>
-        </Menu.Item>
+    <>
+      {showMainNav ? (
+        <Menu selectedKeys={[pathname]} mode="horizontal">
+          {NavItems.map((item) => (
+            <Menu.Item key={item.id} icon={item.icon}>
+              <Link href={item.id}>{item.text}</Link>
+            </Menu.Item>
+          ))}
+          {session && (
+            <Menu.Item key={"logout"}>
+              <SimpleButton onClick={() => signOut()}>Logout</SimpleButton>
+            </Menu.Item>
+          )}
+        </Menu>
+      ) : (
+        <div className={classes.flexBox}>
+          <Typography.Title level={3}>{title}</Typography.Title>
+        </div>
       )}
-    </Menu>
+    </>
   );
 };
 

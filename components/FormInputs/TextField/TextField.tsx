@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Input } from "antd";
+import { Form, Input, Typography } from "antd";
 import { TextFieldProps } from "./TextField.types";
 import { Rule } from "antd/lib/form";
 import { camelToSentenceCase } from "lib/str/convertCamelCaseToSentenceCase";
@@ -12,6 +12,7 @@ const TextField = ({
   patternValMsg,
   dependency,
   prefix,
+  label,
   placeholder,
   disabled = false,
   maxLength,
@@ -64,21 +65,24 @@ const TextField = ({
   };
 
   return (
-    <Form.Item
-      name={name}
-      rules={createRules()}
-      dependencies={dependency ? [dependency] : []}
-      style={{ width: 300 }}
-    >
-      <Input
-        prefix={prefix}
-        placeholder={placeholder}
-        disabled={disabled}
-        maxLength={maxLength}
-        type={type}
-        size="large"
-      />
-    </Form.Item>
+    <div>
+      {label && <Typography.Text>{label}</Typography.Text>}
+      <Form.Item
+        name={name}
+        rules={createRules()}
+        dependencies={dependency ? [dependency] : []}
+        style={{ width: 300 }}
+      >
+        <Input
+          prefix={prefix}
+          placeholder={placeholder}
+          disabled={disabled}
+          maxLength={maxLength}
+          type={type}
+          size="large"
+        />
+      </Form.Item>
+    </div>
   );
 };
 

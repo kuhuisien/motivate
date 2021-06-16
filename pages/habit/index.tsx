@@ -4,8 +4,12 @@ import React from "react";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
 import { PATHS } from "lib/nav/routes";
+import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
+import { useRouter } from "next/router";
 
-const Home = () => {
+const Habit = () => {
+  const router = useRouter();
+
   return (
     <div className={styles.container}>
       <Head>
@@ -14,7 +18,9 @@ const Home = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1>Welcome :)</h1>
+      <SimpleButton onClick={() => router.push(PATHS.HABIT_CREATE.path)}>
+        CREATE
+      </SimpleButton>
     </div>
   );
 };
@@ -35,4 +41,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default Home;
+export default Habit;

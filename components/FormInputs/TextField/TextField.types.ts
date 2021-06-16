@@ -32,6 +32,9 @@ export interface TextFieldProps {
   // prefix to be displayed in the textfield
   prefix?: React.ReactNode;
 
+  // label to be displayed on top of the textfield
+  label?: string;
+
   // placeholder of the textfield
   placeholder?: string;
 

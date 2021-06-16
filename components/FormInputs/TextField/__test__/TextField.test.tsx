@@ -1,7 +1,7 @@
 import React from "react";
 import { mount, ReactWrapper } from "enzyme";
 import TextField from "../TextField";
-import { Input, Form } from "antd";
+import { Input, Form, Typography } from "antd";
 import { TextFieldProps } from "../TextField.types";
 import { FormProvidersWrapper } from "lib/TestUtil/ProviderWrapper/ProviderWrapper";
 
@@ -129,6 +129,12 @@ describe("TextField", () => {
     const prefix = <div>dummy prefix</div>;
     wrapper = renderTextField({ prefix });
     expect(wrapper.find(Input).props().prefix).toBe(prefix);
+  });
+
+  it("should map label prop correctly", () => {
+    const label = "dummy label";
+    wrapper = renderTextField({ label });
+    expect(wrapper.find(Typography.Text).text()).toBe(label);
   });
 
   it("should map placeholder prop correctly", () => {

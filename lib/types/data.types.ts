@@ -1,5 +1,5 @@
 export interface IterableElement {
-  id: string | number;
+  id: string;
   text: string;
 }
 
