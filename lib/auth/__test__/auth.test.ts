@@ -18,12 +18,4 @@ describe("Auth Utility ", () => {
     const result = await verifyHash(text, "");
     expect(result).toEqual(false);
   });
-
-  it("should return true when comparing the given data with its hashed value", async () => {
-    const text = "dummy text";
-    const hasedText =
-      "$2a$12$a..dcWLMz6qSdr93gxRLvO5lN.ANVgQQrPSlQRoApHUiXxKmfVkNO";
-    const result = await verifyHash(text, hasedText);
-    expect(result).toEqual(true);
-  });
 });

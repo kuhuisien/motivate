@@ -21,7 +21,7 @@ export const PATHS: AppPaths = {
   HABIT_CREATE: {
     path: `${HABIT_PATH}/create`,
     displayName: TITLES.HABITS,
-    allowGoBackInHistory: false,
+    allowGoBackInHistory: true,
   },
   DAILIES: {
     path: DAILIES_PATH,
