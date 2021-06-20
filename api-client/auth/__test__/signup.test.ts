@@ -31,4 +31,32 @@ describe("API call /auth/signup", () => {
     expect(mockedAxios.post).toHaveBeenCalledTimes(1);
     expect(resolvedValue).toEqual(MOCK_SIGNUP_RESPONSE);
   });
+
+  it("should throw error with message if request operation throws error", async () => {
+    const errorMessage = "dummy error message";
+
+    mockedAxios.post.mockRejectedValue(new Error(errorMessage));
+
+    await expect(signup(MOCK_EMAIL, MOCK_PASSWORD)).rejects.toThrow(
+      new Error("")
+    );
+
+    expect(consoleSpy).toBeCalled();
+    expect(mockedAxios.post).toHaveBeenCalled();
+  });
+
+  it("should throw error with message if request operation throws error", async () => {
+    const errorMessage = "dummy error message";
+
+    mockedAxios.post.mockRejectedValue({
+      response: { data: { message: errorMessage } },
+    });
+
+    await expect(signup(MOCK_EMAIL, MOCK_PASSWORD)).rejects.toThrow(
+      new Error(errorMessage)
+    );
+
+    expect(consoleSpy).toBeCalled();
+    expect(mockedAxios.post).toHaveBeenCalled();
+  });
 });

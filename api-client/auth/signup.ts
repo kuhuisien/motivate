@@ -16,7 +16,7 @@ const signup = async (
     );
     return parseResponse(response, SIGN_UP_URL);
   } catch (error) {
-    const errorMessage = error.response.data.message;
+    const errorMessage = error?.response?.data?.message;
     console.error(errorMessage);
     throw new Error(errorMessage);
   }
