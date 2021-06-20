@@ -1,10 +1,11 @@
 import React from "react";
-import { Menu, Typography } from "antd";
+import { Menu, Typography, Button } from "antd";
 import { NavigationBarItem } from "./AppNavigationBar.types";
 import {
   MailOutlined,
   AppstoreOutlined,
   SettingOutlined,
+  RollbackOutlined,
 } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -18,12 +19,7 @@ const NavItems: NavigationBarItem[] = [
   {
     id: PATHS.HABIT.path,
     text: PATHS.HABIT.displayName,
-    icon: <MailOutlined />,
-  },
-  {
-    id: PATHS.DAILIES.path,
-    text: PATHS.DAILIES.displayName,
-    icon: <AppstoreOutlined />,
+    icon: <SettingOutlined />,
   },
   {
     id: PATHS.TODOS.path,
@@ -38,7 +34,8 @@ const NavItems: NavigationBarItem[] = [
 ];
 
 const AppNavigationBar = () => {
-  const pathname = useRouter().pathname;
+  const router = useRouter();
+  const pathname = router.pathname;
   const path = retrievePath(pathname);
 
   const [session] = useSession();
@@ -48,6 +45,8 @@ const AppNavigationBar = () => {
     NavItems.find((n) => n.id == pathname) !== undefined;
 
   const title = path?.displayName;
+  const showBackButton = path?.allowGoBackInHistory;
+  const goBack = () => router.back();
 
   return (
     <>
@@ -66,7 +65,15 @@ const AppNavigationBar = () => {
         </Menu>
       ) : (
         <div className={classes.flexBox}>
-          <Typography.Title level={3}>{title}</Typography.Title>
+          {showBackButton && (
+            <Button className={classes.backButtonContainer} onClick={goBack}>
+              <RollbackOutlined className={classes.backButton} />
+            </Button>
+          )}
+
+          <Typography.Title level={3} className={classes.title}>
+            {title}
+          </Typography.Title>
         </div>
       )}
     </>

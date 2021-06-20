@@ -2,5 +2,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.backButtonContainer {
+  border: 0;
+  position: absolute;
+  left: 0;
+}
+
+.backButton {
+  color: black;
+}
+
+.title {
   padding-top: 16px;
 }

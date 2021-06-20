@@ -1,11 +1,22 @@
 import React from "react";
 import { mount, ReactWrapper } from "enzyme";
 import AppNavigationBar from "../AppNavigationBar";
-import { Menu, Button } from "antd";
+import { Menu } from "antd";
 import Link from "next/link";
 import { act } from "react-dom/test-utils";
 
-describe("AppNavigationBar general test", () => {
+// mock individual test case for rendering Menu
+jest.mock("next/router", () => ({
+  // ensure functionalities of original module are preserved
+  ...jest.requireActual<{}>("next/router"),
+
+  // mock hooks within unit test, if not, navigation in unit tests using these hook will throw a TypeError
+  useRouter: () => ({
+    pathname: "/habit", //module factory of `jest.mock()` is not allowed to reference any out-of-scope variables
+  }),
+}));
+
+describe("AppNavigationBar test displaying NavigationBar when it is feature page", () => {
   /**
    * mock the fetch function that is called internally
    */
@@ -37,24 +48,13 @@ describe("AppNavigationBar general test", () => {
 
     const selectedKeys = wrapper.find(Menu).props().selectedKeys;
     if (selectedKeys) {
-      expect(selectedKeys[0]).toEqual("/");
+      expect(selectedKeys[0]).toEqual("/habit");
     }
   });
 
   // ====================
   // MENU ITEM
   // ====================
-  it("should render Menu Item component correctly", () => {
-    // three feature MenuItem and one Logout button
-    const length = 4;
-
-    expect(wrapper.find(Menu.Item).length).toBe(length);
-
-    for (let i = 0; i < 3; i++) {
-      expect(wrapper.find(Menu.Item).at(i).props().icon).not.toBeFalsy();
-    }
-  });
-
   it("should render link in Menu Item component correctly", () => {
     // three feature MenuItem and one Logout button
     const length = 4;
@@ -64,16 +64,6 @@ describe("AppNavigationBar general test", () => {
     for (let i = 0; i < 3; i++) {
       const linkComponent = wrapper.find(Menu.Item).at(i).find(Link);
       expect(linkComponent.exists()).toEqual(true);
-    }
-  });
-
-  it("should have click handler for logout button", () => {
-    const onClickHandler = wrapper.find(Button).props().onClick;
-
-    if (onClickHandler) {
-      onClickHandler({} as any);
-    } else {
-      fail("onClick prop set on the button was found to be undefined");
     }
   });
 });
