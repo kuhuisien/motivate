@@ -1,17 +1,23 @@
-import styles from "styles/Habit.module.css";
 import React from "react";
 import { GetServerSideProps } from "next";
+import Image from "next/image";
 import { getSession } from "next-auth/client";
-import { PATHS } from "lib/nav/routes";
+import { Form, Typography } from "antd";
 import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
 import TextField from "components/FormInputs/TextField/TextField";
 import TextArea from "components/FormInputs/TextArea/Textarea";
-import { Form, Typography } from "antd";
 import RadioButton from "components/FormInputs/RadioButton/RadioButton";
-import { Radio } from "components/FormInputs/RadioButton/RadioButton.types";
-import Image from "next/image";
-//import { PositiveIcon } from "lib/img/index";
-import PositiveIcon from "./common/positive.svg";
+import { RadioType } from "components/FormInputs/RadioButton/RadioButton.types";
+import { PATHS } from "lib/nav/routes";
+import {
+  DIFFICULTY_ID,
+  EASY_ICON,
+  MEDIUM_ICON,
+  HARD_ICON,
+} from "components/Habit/HabitCard/constant";
+import classes from "styles/HabitCreate.module.css";
+
+const RADIO_BUTTON_ICON_SIZE = 50;
 
 const Create = () => {
   const [form] = Form.useForm();
@@ -19,20 +25,58 @@ const Create = () => {
   const formFieldNames = {
     taskTitle: "taskTitle",
     notes: "notes",
-    nature: "nature",
+    difficulty: "difficulty",
   };
 
-  const taskNature: Radio[] = [
+  const taskNature: RadioType[] = [
     {
-      id: "p",
+      id: DIFFICULTY_ID.EASY,
       body: (
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <Image src="/lib/img/common/positive.svg" height={30} width={30} />
-          {/* <Typography.Text>Positive</Typography.Text> */}
+        <div className={classes.difficulty}>
+          <Image
+            src={EASY_ICON}
+            alt={DIFFICULTY_ID.EASY}
+            width={RADIO_BUTTON_ICON_SIZE}
+            height={RADIO_BUTTON_ICON_SIZE}
+          />
+          <Typography.Text className={classes.difficultyText}>
+            EASY
+          </Typography.Text>
         </div>
       ),
     },
-    { id: "n", body: "negative" },
+    {
+      id: DIFFICULTY_ID.MEDIUM,
+      body: (
+        <div className={classes.difficulty}>
+          <Image
+            src={MEDIUM_ICON}
+            alt={DIFFICULTY_ID.MEDIUM}
+            width={RADIO_BUTTON_ICON_SIZE}
+            height={RADIO_BUTTON_ICON_SIZE}
+          />
+          <Typography.Text className={classes.difficultyText}>
+            MEDIUM
+          </Typography.Text>
+        </div>
+      ),
+    },
+    {
+      id: DIFFICULTY_ID.HARD,
+      body: (
+        <div className={classes.difficulty}>
+          <Image
+            src={HARD_ICON}
+            alt={DIFFICULTY_ID.HARD}
+            width={RADIO_BUTTON_ICON_SIZE}
+            height={RADIO_BUTTON_ICON_SIZE}
+          />
+          <Typography.Text className={classes.difficultyText}>
+            HARD
+          </Typography.Text>
+        </div>
+      ),
+    },
   ];
 
   const onFinish = async (values: any) => {
@@ -44,7 +88,7 @@ const Create = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={classes.container}>
       <Form form={form} onFinish={onFinish} onValuesChange={onChange}>
         <TextField
           name={formFieldNames.taskTitle}
@@ -58,7 +102,7 @@ const Create = () => {
         ></TextArea>
 
         <RadioButton
-          name={formFieldNames.nature}
+          name={formFieldNames.difficulty}
           values={taskNature}
           defaultValue={taskNature[0].id}
         ></RadioButton>

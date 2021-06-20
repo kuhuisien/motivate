@@ -1,0 +1,14 @@
+.cardContainer {
+  position: relative;
+}
+
+.card {
+  width: 25rem;
+}
+
+.hitButton {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 0.75rem;
+}
