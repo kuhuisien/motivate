@@ -37,8 +37,26 @@ jest.mock("next/router", () => ({
   // ensure functionalities of original module are preserved
   ...jest.requireActual<{}>("next/router"),
 
-  // mock hooks within unit test, if not, navigation in unit tests using these hook will throw a TypeError
+  // mock hooks within unit test
   useRouter: () => ({
     pathname: "/",
+    back: jest.fn(),
   }),
+}));
+
+jest.mock("next-auth/client", () => ({
+  // ensure functionalities of original module are preserved
+  ...jest.requireActual<{}>("next-auth/client"),
+
+  // mock hooks within unit test to avoid error message in console, and to mock the session for testing auth UI
+  useSession: () => [
+    {
+      session: {
+        expires: "1",
+        user: { email: "a", name: "Delta", image: "c" },
+      },
+    },
+  ],
+  // mock hooks within unit test to avoid error message in console
+  signOut: jest.fn(),
 }));
