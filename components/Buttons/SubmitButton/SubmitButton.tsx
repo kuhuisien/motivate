@@ -12,8 +12,8 @@ import classes from "./SubmitButton.module.css";
 const SubmitButton = ({
   children,
   size,
-  icon,
   loading = false,
+  icon,
   onClick,
 }: SubmitButtonProps) => {
   return (

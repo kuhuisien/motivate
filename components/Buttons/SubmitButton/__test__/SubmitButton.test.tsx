@@ -3,7 +3,7 @@ import { mount, ReactWrapper } from "enzyme";
 import { Button } from "antd";
 import { SubmitButtonProps } from "../SubmitButton.types";
 import SubmitButton from "../SubmitButton";
-import Form, { FormInstance } from "antd/lib/form";
+import Form from "antd/lib/form";
 import { FormProvidersWrapper } from "lib/TestUtil/ProviderWrapper/ProviderWrapper";
 
 describe("SubmitButton", () => {
@@ -12,7 +12,6 @@ describe("SubmitButton", () => {
   let defaultProps: SubmitButtonProps;
 
   function renderSubmitButton(args: any) {
-    const formRef = React.createRef<FormInstance>();
     defaultProps = {
       children: "dummy child",
     };
@@ -64,6 +63,10 @@ describe("SubmitButton", () => {
     const loading = true;
     wrapper = renderSubmitButton({ loading });
     expect(wrapper.find(Button).props().loading).toBe(loading);
+  });
+
+  it("should disable button correctly when form fields are untouched", () => {
+    expect(wrapper.find(Button).props().disabled).toBe(false);
   });
 
   it("should map default icon prop correctly", () => {
