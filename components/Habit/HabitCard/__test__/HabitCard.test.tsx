@@ -1,57 +1,84 @@
 import React from "react";
 import { mount, ReactWrapper } from "enzyme";
-import { Form } from "antd";
-import { FormProvidersWrapper } from "lib/TestUtil/ProviderWrapper/ProviderWrapper";
-import Textarea from "../Textarea";
-import { TextareaProps } from "../Textarea.types";
-import TextArea from "antd/lib/input/TextArea";
+import { Card, Avatar } from "antd";
+import { HabitCardProps, HabitType } from "../HabitCard.types";
+import { DIFFICULTY_ID, EASY_ICON, MEDIUM_ICON, HARD_ICON } from "../constant";
+import HabitCard from "../HabitCard";
+import Meta from "antd/lib/card/Meta";
+import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
 
-describe("TextField", () => {
+describe("HabitCard", () => {
   let wrapper: ReactWrapper;
 
-  let defaultProps: TextareaProps;
+  let defaultProps: HabitCardProps;
 
-  function renderTextarea(args: any) {
+  function renderHabitCard(args: any) {
+    const MOCK_HABIT: HabitType = {
+      taskTitle: "dummy title",
+      notes: "dummy notes",
+      difficultyId: DIFFICULTY_ID.EASY,
+    };
     defaultProps = {
-      name: "username",
-      rows: 5,
+      habit: MOCK_HABIT,
     };
     const props = { ...defaultProps, ...args };
-    return mount(
-      <FormProvidersWrapper>
-        <Textarea {...props} />
-      </FormProvidersWrapper>
-    );
+    return mount(<HabitCard {...props} />);
   }
 
   beforeEach(() => {
-    wrapper = renderTextarea(null);
-  });
-
-  it("should render TextArea component", () => {
-    expect(wrapper.find(TextArea).length).toBe(1);
+    wrapper = renderHabitCard(null);
   });
 
   // ====================
-  // MAPPING PROPS
+  // CARD
   // ====================
-  it("should map name prop correctly", () => {
-    expect(wrapper.find(Form.Item).props().name).toBe(defaultProps.name);
+  it("should render Card component correctly", () => {
+    const component = wrapper.find(Card);
+    expect(component.props().hoverable).toBe(true);
   });
 
-  it("should map rows prop correctly", () => {
-    expect(wrapper.find(TextArea).props().rows).toBe(defaultProps.rows);
+  it("should display title of habit correctly on Card", () => {
+    const component = wrapper.find(Card);
+    expect(component.props().title).toBe(defaultProps.habit.taskTitle);
   });
 
-  it("should map placeholder prop correctly", () => {
-    const placeholder = "dummy placeholder";
-    wrapper = renderTextarea({ placeholder });
-    expect(wrapper.find(TextArea).props().placeholder).toBe(placeholder);
+  it("should invoke onClick handler after clicking Card", () => {
+    wrapper.find(Card).simulate("click");
   });
 
-  it("should map maxLength prop correctly", () => {
-    const maxLength = 8;
-    wrapper = renderTextarea({ maxLength });
-    expect(wrapper.find(TextArea).props().maxLength).toBe(maxLength);
+  // ====================
+  // CONTENT
+  // ====================
+  it("should display notes correctly", () => {
+    expect(wrapper.find(Meta).props().description).toBe(
+      defaultProps.habit.notes
+    );
+  });
+
+  it("should display easy icon correctly when it belong to easy difficulty", () => {
+    const component = wrapper.find(Meta).props().avatar;
+    const expected = <Avatar src={EASY_ICON} />;
+    expect(component).toBe(expected);
+  });
+
+  it("should display medium icon correctly when it belong to medium difficulty", () => {
+    wrapper = renderHabitCard({ difficultyId: DIFFICULTY_ID.MEDIUM });
+    const component = wrapper.find(Meta).props().avatar;
+    const expected = <Avatar src={MEDIUM_ICON} />;
+    expect(component).toBe(expected);
+  });
+
+  it("should display hard icon correctly when it belong to hard difficulty", () => {
+    wrapper = renderHabitCard({ difficultyId: DIFFICULTY_ID.HARD });
+    const component = wrapper.find(Meta).props().avatar;
+    const expected = <Avatar src={HARD_ICON} />;
+    expect(component).toBe(expected);
+  });
+
+  // ====================
+  // BUTTON
+  // ====================
+  it("should invoke onClick handler for Button correctly", () => {
+    wrapper.find(SimpleButton).simulate("click");
   });
 });

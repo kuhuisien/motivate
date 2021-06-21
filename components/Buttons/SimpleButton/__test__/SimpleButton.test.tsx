@@ -91,7 +91,7 @@ describe("SimpleButton", () => {
   // ====================
   // EVENT HANDLER
   // ====================
-  it("checks if handleSearchChange method works correctly", () => {
+  it("should invoke onClick handler", () => {
     onClickListener = jest.fn();
     wrapper = renderSimpleButton({ onClick: onClickListener });
     wrapper.find(Button).simulate("click");
