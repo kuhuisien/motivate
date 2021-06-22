@@ -9,6 +9,7 @@ import { HabitType } from "components/Habit/HabitCard/HabitCard.types";
 import { DIFFICULTY_ID } from "components/Habit/HabitCard/constant";
 import { PATHS } from "lib/nav/routes";
 import classes from "styles/Habit.module.css";
+import HabitCardContainer from "components/Habit/HabitCard/HabitCardContainer";
 
 const MOCK_HABITS: HabitType[] = [
   {
@@ -30,7 +31,7 @@ const Habit = () => {
     <div className={classes.container}>
       <Space direction="vertical" align="center" className={classes.habit}>
         {MOCK_HABITS.map((h) => (
-          <HabitCard key={h.taskTitle} habit={h}></HabitCard>
+          <HabitCardContainer key={h.taskTitle} habit={h}></HabitCardContainer>
         ))}
 
         <SimpleButton onClick={() => router.push(PATHS.HABIT_CREATE.path)}>

@@ -5,11 +5,18 @@ import Meta from "antd/lib/card/Meta";
 import { DIFFICULTY_ID, EASY_ICON, MEDIUM_ICON, HARD_ICON } from "./constant";
 import classes from "./HabitCard.module.css";
 import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
+import { useRouter } from "next/router";
+import { PATHS } from "lib/nav/routes";
 
-const HabitCard = ({ habit }: HabitCardProps) => {
-  const cardClickHandler = () => console.log(habit);
+const HabitCard = ({ habit, setSelectedHabit }: HabitCardProps) => {
+  const router = useRouter();
 
-  const hitButtonClickHandler = () => console.log("hit");
+  const cardClickHandler = () => {
+    setSelectedHabit(habit);
+    router.push(PATHS.HABIT_EDIT.path);
+  };
+
+  const hitButtonClickHandler = () => {};
 
   const difficultyAvatar = () => {
     switch (habit.difficultyId) {

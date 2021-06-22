@@ -1,5 +1,7 @@
 export interface HabitCardProps {
   habit: HabitType;
+
+  setSelectedHabit: (habit: HabitType) => void;
 }
 
 export type HabitType = {

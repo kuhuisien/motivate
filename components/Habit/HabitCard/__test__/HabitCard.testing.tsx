@@ -20,6 +20,7 @@ describe("HabitCard", () => {
     };
     defaultProps = {
       habit: MOCK_HABIT,
+      setSelectedHabit: jest.fn(),
     };
     const props = { ...defaultProps, ...args };
     return mount(<HabitCard {...props} />);
