@@ -22,11 +22,6 @@ const NavItems: NavigationBarItem[] = [
     icon: <SettingOutlined />,
   },
   {
-    id: PATHS.TODOS.path,
-    text: PATHS.TODOS.displayName,
-    icon: <SettingOutlined />,
-  },
-  {
     id: PATHS.REWARDS.path,
     text: PATHS.REWARDS.displayName,
     icon: <MailOutlined />,

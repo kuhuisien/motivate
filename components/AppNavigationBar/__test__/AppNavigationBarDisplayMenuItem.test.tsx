@@ -57,11 +57,11 @@ describe("AppNavigationBar test displaying NavigationBar when it is feature page
   // ====================
   it("should render link in Menu Item component correctly", () => {
     // three feature MenuItem and one Logout button
-    const length = 4;
+    const length = 3;
 
     expect(wrapper.find(Menu.Item).length).toBe(length);
 
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < length - 1; i++) {
       const linkComponent = wrapper.find(Menu.Item).at(i).find(Link);
       expect(linkComponent.exists()).toEqual(true);
     }

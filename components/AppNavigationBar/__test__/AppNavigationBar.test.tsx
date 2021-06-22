@@ -18,6 +18,7 @@ describe("AppNavigationBar general test", () => {
   globalRef.fetch = jest.fn().mockImplementation(() => mockFetchPromise);
 
   let wrapper: ReactWrapper;
+  const MENU_ITEM_COUNT = 3; //two feature MenuItem and one Logout button
 
   function renderAppNavigationBar() {
     return mount(<AppNavigationBar />);
@@ -45,23 +46,17 @@ describe("AppNavigationBar general test", () => {
   // MENU ITEM
   // ====================
   it("should render Menu Item component correctly", () => {
-    // three feature MenuItem and one Logout button
-    const length = 4;
+    expect(wrapper.find(Menu.Item).length).toBe(MENU_ITEM_COUNT);
 
-    expect(wrapper.find(Menu.Item).length).toBe(length);
-
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < MENU_ITEM_COUNT - 1; i++) {
       expect(wrapper.find(Menu.Item).at(i).props().icon).not.toBeFalsy();
     }
   });
 
   it("should render link in Menu Item component correctly", () => {
-    // three feature MenuItem and one Logout button
-    const length = 4;
+    expect(wrapper.find(Menu.Item).length).toBe(MENU_ITEM_COUNT);
 
-    expect(wrapper.find(Menu.Item).length).toBe(length);
-
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < MENU_ITEM_COUNT - 1; i++) {
       const linkComponent = wrapper.find(Menu.Item).at(i).find(Link);
       expect(linkComponent.exists()).toEqual(true);
     }
