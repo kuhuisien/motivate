@@ -4,6 +4,7 @@ import { RadioButtonProps, RadioType as RadioType } from "../RadioButton.types";
 import RadioButton from "../RadioButton";
 import Radio from "antd/lib/radio";
 import { Form } from "antd";
+import { FormProvidersWrapper } from "lib/TestUtil/ProviderWrapper/ProviderWrapper";
 
 describe("SimpleButton", () => {
   let wrapper: ReactWrapper;
@@ -20,7 +21,11 @@ describe("SimpleButton", () => {
       values: dummyRadioButtonSelectionValues,
     };
     const props = { ...defaultProps, ...args };
-    return mount(<RadioButton {...props} />);
+    return mount(
+      <FormProvidersWrapper>
+        <RadioButton {...props} />
+      </FormProvidersWrapper>
+    );
   }
 
   beforeEach(() => {

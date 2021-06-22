@@ -6,7 +6,7 @@ export interface SimpleButtonProps {
   htmlType?: "button" | "submit" | "reset";
 
   // styling type
-  type?: "primary" | "text";
+  type?: "primary" | "text" | "dashed";
 
   // size of button, default value is 'middle'
   size?: "small" | "large" | "middle";

@@ -39,6 +39,12 @@ describe("TextField", () => {
     expect(wrapper.find(Form.Item).props().name).toBe(defaultProps.name);
   });
 
+  it("should map defaultValue prop correctly", () => {
+    const defaultValue = 8;
+    wrapper = renderTextarea({ defaultValue });
+    expect(wrapper.find(Form.Item).props().initialValue).toBe(defaultValue);
+  });
+
   it("should map rows prop correctly", () => {
     expect(wrapper.find(TextArea).props().rows).toBe(defaultProps.rows);
   });

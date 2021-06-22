@@ -4,9 +4,15 @@ import { TextareaProps } from "./Textarea.types";
 
 const { TextArea } = Input;
 
-const Textarea = ({ name, rows, placeholder, maxLength }: TextareaProps) => {
+const Textarea = ({
+  name,
+  rows,
+  placeholder,
+  maxLength,
+  defaultValue,
+}: TextareaProps) => {
   return (
-    <Form.Item name={name}>
+    <Form.Item name={name} initialValue={defaultValue}>
       <TextArea
         rows={rows}
         placeholder={placeholder}

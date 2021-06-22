@@ -3,4 +3,5 @@ export interface TextareaProps {
   rows: number;
   placeholder?: string;
   maxLength?: number;
+  defaultValue?: string | null;
 }

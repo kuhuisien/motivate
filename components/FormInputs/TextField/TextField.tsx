@@ -17,6 +17,7 @@ const TextField = ({
   disabled = false,
   maxLength,
   type = "text",
+  defaultValue,
 }: TextFieldProps) => {
   // create validation rules
   const createRules = () => {
@@ -70,6 +71,7 @@ const TextField = ({
       <Form.Item
         name={name}
         rules={createRules()}
+        initialValue={defaultValue}
         dependencies={dependency ? [dependency] : []}
         style={{ width: 300 }}
       >

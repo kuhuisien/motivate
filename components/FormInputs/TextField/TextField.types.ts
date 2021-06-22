@@ -46,4 +46,6 @@ export interface TextFieldProps {
 
   // type of textfield, default value is 'text'
   type?: "text" | "password" | "email";
+
+  defaultValue?: string | null;
 }
