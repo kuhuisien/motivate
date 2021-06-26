@@ -4,23 +4,24 @@ import { getSession } from "next-auth/client";
 import { useRouter } from "next/router";
 import { Space } from "antd";
 import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
-import HabitCard from "components/Habit/HabitCard/HabitCard";
-import { HabitType } from "components/Habit/HabitCard/HabitCard.types";
 import { DIFFICULTY_ID } from "components/Habit/HabitCard/constant";
 import { PATHS } from "lib/nav/routes";
 import classes from "styles/Habit.module.css";
 import HabitCardContainer from "components/Habit/HabitCard/HabitCardContainer";
+import { HabitType } from "lib/types/data.types";
 
 const MOCK_HABITS: HabitType[] = [
   {
     taskTitle: "testing task title",
     notes: "dummy notes",
     difficultyId: DIFFICULTY_ID.EASY,
+    createdAt: new Date(),
   },
   {
     taskTitle: "testing task title2",
     notes: "dummy notes2",
     difficultyId: DIFFICULTY_ID.EASY,
+    createdAt: new Date(),
   },
 ];
 

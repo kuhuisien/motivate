@@ -17,7 +17,7 @@ type Props = AppProps & { store: any };
 function MyApp({ Component, pageProps, store }: Props) {
   return (
     <Provider store={store}>
-      <NexthAuthProvider session={pageProps.session}>
+      <NexthAuthProvider session={pageProps?.session}>
         <Layout>
           <Header className="header">
             <AppNavigationBar />
