@@ -17,24 +17,35 @@ const SubmitButton = ({
   onClick,
 }: SubmitButtonProps) => {
   return (
-    <Form.Item shouldUpdate className={classes.button}>
-      {(form) => (
-        <SimpleButton
-          htmlType="submit"
-          size={size}
-          loading={loading}
-          disabled={
-            !form.isFieldsTouched(true) ||
-            form.getFieldsError().filter(({ errors }) => errors.length).length >
-              0
-          }
-          icon={icon}
-          onClick={onClick}
-        >
-          {children}
-        </SimpleButton>
-      )}
+    <Form.Item className={classes.button}>
+      <SimpleButton
+        htmlType="submit"
+        size={size}
+        loading={loading}
+        icon={icon}
+        onClick={onClick}
+      >
+        {children}
+      </SimpleButton>
     </Form.Item>
+    // <Form.Item shouldUpdate className={classes.button}>
+    //   {(form) => (
+    //     <SimpleButton
+    //       htmlType="submit"
+    //       size={size}
+    //       loading={loading}
+    //       disabled={
+    //         !form.isFieldsTouched(true) ||
+    //         form.getFieldsError().filter(({ errors }) => errors.length).length >
+    //           0
+    //       }
+    //       icon={icon}
+    //       onClick={onClick}
+    //     >
+    //       {children}
+    //     </SimpleButton>
+    //   )}
+    // </Form.Item>
   );
 };
 

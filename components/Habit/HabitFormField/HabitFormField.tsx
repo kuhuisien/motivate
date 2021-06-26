@@ -16,7 +16,7 @@ import TextArea from "components/FormInputs/TextArea/Textarea";
 
 const RADIO_BUTTON_ICON_SIZE = 50;
 
-const formFieldNames = {
+export const formFieldNames = {
   taskTitle: "taskTitle",
   notes: "notes",
   difficulty: "difficulty",
