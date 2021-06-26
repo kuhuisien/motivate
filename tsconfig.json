@@ -16,13 +16,6 @@
     "isolatedModules": true,
     "jsx": "preserve"
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "lib/customHooks/use-isomorphic-layout-effect.js",
-    "pages/api/auth/signup.tsx",
-    "components/Buttons/SubmitButton/__test__/SubmitButton.test.tsxs"
-  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }
