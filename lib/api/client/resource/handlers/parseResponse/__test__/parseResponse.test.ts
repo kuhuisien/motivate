@@ -1,4 +1,4 @@
-import * as ERR_MSG from "../../ErrorMessage";
+import * as ERR_MSG from "../../errorMessage";
 import { parseResponse } from "../parseResponse";
 
 describe("Parse Axios response", () => {

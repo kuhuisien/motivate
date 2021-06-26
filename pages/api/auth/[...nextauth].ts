@@ -2,8 +2,12 @@ import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
 import firebase from "firebase/app";
 import "firebase/firestore";
-import { USERS_COLLECTION, EMAIL_FIELD } from "lib/firebase/constant";
+import { USERS_COLLECTION } from "lib/firebase/constant";
 import { verifyHash } from "lib/auth/auth";
+import {
+  LOGIN_NO_USER_RECORD_ERROR_MESSAGE,
+  LOGIN_INCORRECT_PASSWORD_ERROR_MESSAGE,
+} from "lib/api/server/constant";
 
 export default NextAuth({
   session: {
@@ -19,21 +23,26 @@ export default NextAuth({
       async authorize(credentials: Record<string, string>, req) {
         const { email, password } = credentials;
 
-        // look up user form the credentials supplied
-        const usersRef = firebase.firestore().collection(USERS_COLLECTION);
-        const snapshot = await usersRef.where(EMAIL_FIELD, "==", email).get();
+        // look up user using the credentials supplied
+        var userRef = firebase
+          .firestore()
+          .collection(USERS_COLLECTION)
+          .doc(email);
 
-        if (snapshot.empty) {
-          throw new Error("No user found");
+        // check if user has been signed up before
+        var userSnapshot = await userRef.get();
+        if (!userSnapshot.exists) {
+          throw new Error(LOGIN_NO_USER_RECORD_ERROR_MESSAGE);
         }
 
-        // verify user provided password
-        const hashedPassword = snapshot.docs.map((doc) => doc.data())[0]
-          .password;
+        // check if user entered password is correct
+        var user = userSnapshot.data();
+        // get the hashed password from db
+        const hashedPassword = user?.password;
+        // using util function to compare db hashed password with user entered plain password
         const isValid = await verifyHash(password, hashedPassword);
-
         if (!isValid) {
-          throw new Error("incorrect password");
+          throw new Error(LOGIN_INCORRECT_PASSWORD_ERROR_MESSAGE);
         }
 
         // Any object returned will be saved in `user` property of the JWT

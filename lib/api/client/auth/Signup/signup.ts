@@ -1,8 +1,8 @@
 import axios from "axios";
 import { GeneralResponse } from "lib/types/data.types";
-import { SIGN_UP_URL } from "api-client/resource/configs/URL";
-import { getRequestOptions } from "api-client/resource/configs/requests";
-import { parseResponse } from "api-client/resource/handlers/parseResponse/parseResponse";
+import { SIGN_UP_URL } from "../../resource/configs/URL";
+import { getRequestOptions } from "../../resource/configs/requests";
+import { parseResponse } from "../../resource/handlers/parseResponse/parseResponse";
 
 const signup = async (
   email: string | null,

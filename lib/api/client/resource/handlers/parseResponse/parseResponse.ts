@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import * as ERR_MSG from "../ErrorMessage";
+import * as ERR_MSG from "../errorMessage";
 
 /**
  * Validates the Axios response object and returns its data payload
