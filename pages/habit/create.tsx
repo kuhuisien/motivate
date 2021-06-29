@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
 import { useRouter } from "next/router";
@@ -10,50 +10,41 @@ import HabitFormField, {
 } from "components/Habit/HabitFormField/HabitFormField";
 import { addHabit } from "lib/api/client/habit/AddHabit/addHabit";
 import SubmitButton from "components/Buttons/SubmitButton/SubmitButton";
+import { useAsync } from "lib/hooks/useAsync";
 
 const Create = () => {
   const router = useRouter();
 
+  const { execute, status, error } = useAsync(addHabit, false);
+
   const [form] = Form.useForm();
 
-  // States for the form submission API call
-  const [submitIsLoading, setSubmitIsLoading] = useState(false);
-  const [submitErrorMessage, setSubmitErrorMessage] = useState<string | null>(
-    null
-  );
-
   const onFinish = async (values: any) => {
-    setSubmitIsLoading(true);
+    const taskTitle = values[formFieldNames.taskTitle];
+    const notes = values[formFieldNames.notes];
+    const difficulty = values[formFieldNames.difficulty];
 
-    try {
-      const taskTitle = values[formFieldNames.taskTitle];
-      const notes = values[formFieldNames.notes];
-      const difficulty = values[formFieldNames.difficulty];
-
-      await addHabit({
-        taskTitle,
-        notes,
-        difficultyId: difficulty,
-      });
-
-      router.replace(PATHS.HABIT.path);
-    } catch (error) {
-      setSubmitErrorMessage(error.message);
-    } finally {
-      setSubmitIsLoading(false);
-    }
+    await execute({
+      taskTitle,
+      notes,
+      difficultyId: difficulty,
+    });
   };
+
+  useEffect(() => {
+    if (status === "success") {
+      router.replace(PATHS.HABIT.path);
+    }
+  }, [status]);
 
   return (
     <div className={classes.container}>
       <Form form={form} onFinish={onFinish}>
         <HabitFormField />
 
-        <SubmitButton loading={submitIsLoading}>CREATE</SubmitButton>
+        <SubmitButton loading={status === "pending"}>CREATE</SubmitButton>
 
-        {submitErrorMessage && (
-          <Typography.Text type="danger">{submitErrorMessage}</Typography.Text>
-        )}
+        {error && <Typography.Text type="danger">{error}</Typography.Text>}
       </Form>
     </div>
   );

@@ -17,7 +17,7 @@ const SubmitButton = ({
   onClick,
 }: SubmitButtonProps) => {
   return (
-    <Form.Item className={classes.button}>
+    <Form.Item>
       <SimpleButton
         htmlType="submit"
         size={size}

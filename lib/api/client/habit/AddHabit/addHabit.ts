@@ -1,8 +1,8 @@
 import axios from "axios";
-import { GeneralResponse } from "lib/types/data.types";
 import { ADD_HABIT_URL } from "../../resource/configs/URL";
 import { getRequestOptions } from "../../resource/configs/requests";
 import { parseResponse } from "../../resource/handlers/parseResponse/parseResponse";
+import { GeneralResponse } from "lib/types/common/data.types";
 
 type AddHabitRequestType = {
   taskTitle: string | null;

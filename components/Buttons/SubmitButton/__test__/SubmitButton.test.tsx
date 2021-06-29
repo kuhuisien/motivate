@@ -30,9 +30,9 @@ describe("SubmitButton", () => {
   // ====================
   // FORM ITEM
   // ====================
-  it("should render Form.Item correctly", () => {
-    expect(wrapper.find(Form.Item).props().shouldUpdate).toBe(true);
-  });
+  // it("should render Form.Item correctly", () => {
+  //   expect(wrapper.find(Form.Item).props().shouldUpdate).toBe(true);
+  // });
 
   // ====================
   // MAPPING PROPS

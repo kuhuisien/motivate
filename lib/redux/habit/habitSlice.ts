@@ -1,13 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { HabitState } from "./habit.types";
-import { HabitType } from "components/Habit/HabitCard/HabitCard.types";
 import { RootState } from "../root/redux.types";
+import { HabitType } from "lib/types/habit.types";
 
 export const initialState: HabitState = {
   selectedHabit: {
     taskTitle: null,
     notes: null,
     difficultyId: null,
+    createdAt: null,
   },
 };
 
@@ -29,8 +30,9 @@ export const { setSelectedHabit } = habitSlice.actions;
 
 /**
  * Selector
- * @param state HabitState
+ * @param state HabitType
  */
-export const habitSelector = (state: RootState): HabitState => state.habit;
+export const habitSelector = (state: RootState): HabitType =>
+  state.habit.selectedHabit;
 
 export default habitSlice.reducer;

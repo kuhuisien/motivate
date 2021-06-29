@@ -1,4 +1,4 @@
-import { GeneralResponse } from "lib/types/data.types";
+import { GeneralResponse } from "lib/types/habit.types";
 
 /**
  * A mock of the payload returned by

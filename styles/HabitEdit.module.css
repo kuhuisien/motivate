@@ -8,7 +8,10 @@
   height: 100vh;
 }
 
+.buttons {
+  display: flex;
+}
+
 .deleteButton {
-  display: inline-block;
-  margin-left: 0.5rem;
+  margin-left: 1rem;
 }

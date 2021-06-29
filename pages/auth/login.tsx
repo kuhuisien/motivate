@@ -54,6 +54,10 @@ const Login = () => {
     }
   };
 
+  const googleSignIn = async () => {
+    await signIn("google");
+  };
+
   if (loading) return null;
 
   return (
@@ -79,9 +83,7 @@ const Login = () => {
           <Typography.Text type="danger">{submitErrorMessage}</Typography.Text>
         )}
 
-        <SimpleButton onClick={() => signIn("google")}>
-          Sign in with Google
-        </SimpleButton>
+        <SimpleButton onClick={googleSignIn}>Sign in with Google</SimpleButton>
 
         <div className={classes.button}>
           <SimpleButton

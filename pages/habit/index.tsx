@@ -2,43 +2,57 @@ import React from "react";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
 import { useRouter } from "next/router";
-import { Space } from "antd";
+import { Space, Skeleton } from "antd";
 import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
-import { DIFFICULTY_ID } from "components/Habit/HabitCard/constant";
 import { PATHS } from "lib/nav/routes";
 import classes from "styles/Habit.module.css";
 import HabitCardContainer from "components/Habit/HabitCard/HabitCardContainer";
-import { HabitType } from "lib/types/data.types";
-
-const MOCK_HABITS: HabitType[] = [
-  {
-    taskTitle: "testing task title",
-    notes: "dummy notes",
-    difficultyId: DIFFICULTY_ID.EASY,
-    createdAt: new Date(),
-  },
-  {
-    taskTitle: "testing task title2",
-    notes: "dummy notes2",
-    difficultyId: DIFFICULTY_ID.EASY,
-    createdAt: new Date(),
-  },
-];
+import { useAsync } from "lib/hooks/useAsync";
+import { getHabits } from "lib/api/client/habit/GetHabits/getHabits";
 
 const Habit = () => {
   const router = useRouter();
 
+  const { execute, status, value, error } = useAsync(getHabits);
+
+  const habitList = value?.habitList;
+
   return (
     <div className={classes.container}>
-      <Space direction="vertical" align="center" className={classes.habit}>
-        {MOCK_HABITS.map((h) => (
-          <HabitCardContainer key={h.taskTitle} habit={h}></HabitCardContainer>
-        ))}
+      {status === "pending" ? (
+        <>
+          <Skeleton
+            active
+            paragraph={{ rows: 8 }}
+            className={classes.habitSkeleton}
+          />
+        </>
+      ) : status === "error" ? (
+        <div onClick={() => execute()}>{error}</div>
+      ) : (
+        status === "success" && (
+          <>
+            <Space
+              direction="vertical"
+              align="center"
+              className={classes.habit}
+            >
+              {habitList?.map((h) => (
+                <HabitCardContainer
+                  key={h.taskTitle}
+                  habit={h}
+                ></HabitCardContainer>
+              ))}
 
-        <SimpleButton onClick={() => router.push(PATHS.HABIT_CREATE.path)}>
-          CREATE
-        </SimpleButton>
-      </Space>
+              <SimpleButton
+                onClick={() => router.push(PATHS.HABIT_CREATE.path)}
+              >
+                CREATE
+              </SimpleButton>
+            </Space>
+          </>
+        )
+      )}
     </div>
   );
 };

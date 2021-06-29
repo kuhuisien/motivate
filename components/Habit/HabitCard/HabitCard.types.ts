@@ -1,4 +1,4 @@
-import { HabitType } from "lib/types/data.types";
+import { HabitType } from "lib/types/habit.types";
 
 export interface HabitCardProps {
   habit: HabitType;

@@ -1,11 +1,16 @@
 .container {
   min-height: 100vh;
   padding: 0 0.5rem;
-  margin-top: 3rem;
+  margin-top: 2rem;
 }
 
 .habit {
   width: 100%;
+}
+
+.habitSkeleton {
+  margin: auto;
+  width: 25rem;
 }
 
 .habit .ant-space-item {

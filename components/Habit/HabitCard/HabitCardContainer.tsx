@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import { Dispatch, AnyAction } from "redux";
-import { setSelectedHabit } from "lib/redux/store/habit";
+import { setSelectedHabit } from "lib/redux/habit";
 import { HabitType } from "./HabitCard.types";
 import HabitCard from "./HabitCard";
 

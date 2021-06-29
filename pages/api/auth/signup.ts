@@ -13,8 +13,9 @@ import {
   SIGN_UP_SUCCESS_MESSAGE,
   INTERNAL_SERVER_ERROR,
   INTERNAL_SERVER_ERROR_MESSAGE,
+  METHOD_NOT_ALLOW_ERROR_MESSAGE,
 } from "lib/api/server/constant";
-import { GeneralResponse } from "lib/types/data.types";
+import { GeneralResponse } from "lib/types/common/data.types";
 
 async function handler(
   req: NextApiRequest,
@@ -22,7 +23,9 @@ async function handler(
 ) {
   try {
     if (req.method !== POST) {
-      res.status(BAD_RERQUEST_STATUS_CODE);
+      res
+        .status(BAD_RERQUEST_STATUS_CODE)
+        .json({ message: METHOD_NOT_ALLOW_ERROR_MESSAGE });
       return;
     }
 
@@ -56,6 +59,7 @@ async function handler(
       await userRef.set({
         password: hashedPassword,
         createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
+        point: 0,
       });
       res
         .status(CREATED_SUCCESS_STATUS_CODE)
