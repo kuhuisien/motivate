@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
 import { useRouter } from "next/router";
 import { Form, Typography } from "antd";
 import { PATHS } from "lib/nav/routes";
 import classes from "styles/HabitCreate.module.css";
-import HabitFormField, {
-  formFieldNames,
-} from "components/Habit/HabitFormField/HabitFormField";
-import { addHabit } from "lib/api/client/habit/AddHabit/addHabit";
+import { formFieldNames } from "components/Habit/HabitFormField/HabitFormField";
+import {
+  addHabit,
+  AddHabitRequestType,
+} from "lib/api/client/habit/AddHabit/addHabit";
 import SubmitButton from "components/Buttons/SubmitButton/SubmitButton";
 import { useAsync } from "lib/hooks/useAsync";
+import HabitFormFieldContainer from "components/Habit/HabitFormField/HabitFormFieldContainer";
 
 const Create = () => {
   const router = useRouter();
@@ -28,7 +30,7 @@ const Create = () => {
       taskTitle,
       notes,
       difficultyId: difficulty,
-    });
+    } as AddHabitRequestType);
   };
 
   useEffect(() => {
@@ -40,7 +42,7 @@ const Create = () => {
   return (
     <div className={classes.container}>
       <Form form={form} onFinish={onFinish}>
-        <HabitFormField />
+        <HabitFormFieldContainer />
 
         <SubmitButton loading={status === "pending"}>CREATE</SubmitButton>
 

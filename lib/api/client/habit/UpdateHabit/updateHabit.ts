@@ -29,7 +29,7 @@ const updateHabit = async (
 };
 
 const constructUrl = (query: ApiQuery) => {
-  // ge first parameter
+  // get first parameter
   const id = query[Object.keys(query)[0]];
 
   // encode query parameter value

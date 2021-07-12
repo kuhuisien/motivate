@@ -13,3 +13,8 @@ export const ADD_HABIT_URL = `${API_BASE_URL}/habits/add`;
 export const GET_HABITS_URL = `${API_BASE_URL}/habits`;
 export const EDIT_HABIT_URL = `${API_BASE_URL}/habits`;
 export const DELETE_HABIT_URL = `${API_BASE_URL}/habits`;
+
+// ==========================
+// SystemSetting
+// ==========================
+export const GET_SYSTEM_SETTINGS_URL = `${API_BASE_URL}/systemSettings`;

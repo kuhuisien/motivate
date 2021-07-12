@@ -2,13 +2,16 @@ import React from "react";
 import { Card, Avatar } from "antd";
 import { HabitCardProps } from "./HabitCard.types";
 import Meta from "antd/lib/card/Meta";
-import { DIFFICULTY_ID, EASY_ICON, MEDIUM_ICON, HARD_ICON } from "./constant";
 import classes from "./HabitCard.module.css";
 import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
 import { useRouter } from "next/router";
 import { PATHS } from "lib/nav/routes";
 
-const HabitCard = ({ habit, setSelectedHabit }: HabitCardProps) => {
+const HabitCard = ({
+  habit,
+  difficultySettings,
+  setSelectedHabit,
+}: HabitCardProps) => {
   const router = useRouter();
 
   const cardClickHandler = () => {
@@ -19,15 +22,9 @@ const HabitCard = ({ habit, setSelectedHabit }: HabitCardProps) => {
   const hitButtonClickHandler = () => {};
 
   const difficultyAvatar = () => {
-    switch (habit.difficultyId) {
-      case DIFFICULTY_ID.EASY:
-        return EASY_ICON;
-      case DIFFICULTY_ID.MEDIUM:
-        return MEDIUM_ICON;
-      case DIFFICULTY_ID.HARD:
-        return HARD_ICON;
-    }
+    return difficultySettings.find((d) => d.code === habit.difficultyId)?.image;
   };
+
   return (
     <div className={classes.cardContainer}>
       <Card

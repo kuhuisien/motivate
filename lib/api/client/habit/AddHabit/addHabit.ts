@@ -4,7 +4,7 @@ import { getRequestOptions } from "../../resource/configs/requests";
 import { parseResponse } from "../../resource/handlers/parseResponse/parseResponse";
 import { GeneralResponse } from "lib/types/common/data.types";
 
-type AddHabitRequestType = {
+export type AddHabitRequestType = {
   taskTitle: string | null;
   notes: string | null;
   difficultyId: string | null;

@@ -7,9 +7,7 @@ import { PATHS } from "lib/nav/routes";
 import classes from "styles/HabitEdit.module.css";
 import { useSelector } from "react-redux";
 import { habitSelector } from "lib/redux/habit/habitSlice";
-import HabitFormField, {
-  formFieldNames,
-} from "components/Habit/HabitFormField/HabitFormField";
+import { formFieldNames } from "components/Habit/HabitFormField/HabitFormField";
 import { Modal } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { updateHabit } from "lib/api/client/habit/UpdateHabit/updateHabit";
@@ -18,6 +16,7 @@ import { useAsync } from "lib/hooks/useAsync";
 import { HabitType } from "lib/types/habit.types";
 import SubmitButton from "components/Buttons/SubmitButton/SubmitButton";
 import { deleteHabit } from "lib/api/client/habit/DeleteHabit/deleteHabit";
+import HabitFormFieldContainer from "components/Habit/HabitFormField/HabitFormFieldContainer";
 
 const { confirm } = Modal;
 
@@ -74,7 +73,9 @@ const Edit = () => {
   return (
     <div className={classes.container}>
       <Form form={form} onFinish={onFinish} onFinishFailed={onFinish}>
-        <HabitFormField habitState={habitState}></HabitFormField>
+        <HabitFormFieldContainer
+          habitState={habitState}
+        ></HabitFormFieldContainer>
 
         <div className={classes.buttons}>
           <SubmitButton loading={editStatus === "pending"}>SAVE</SubmitButton>

@@ -5,7 +5,7 @@ import { parseResponse } from "../../resource/handlers/parseResponse/parseRespon
 import { GeneralResponse, ApiQuery } from "lib/types/common/data.types";
 
 const deleteHabit = async (
-  dummyRequestBody: undefined,
+  _dummyRequestBody: undefined,
   query: ApiQuery
 ): Promise<GeneralResponse> => {
   try {

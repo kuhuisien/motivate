@@ -9,13 +9,23 @@ import classes from "styles/Habit.module.css";
 import HabitCardContainer from "components/Habit/HabitCard/HabitCardContainer";
 import { useAsync } from "lib/hooks/useAsync";
 import { getHabits } from "lib/api/client/habit/GetHabits/getHabits";
+import { getSystemSettings } from "lib/api/client/systemSetting/GetSystemSetting/GetSystemSetting";
+import { SystemSetting } from "lib/types/systemSetting.types";
+import { useGetSystemSettings } from "lib/hooks/useCounter";
 
-const Habit = () => {
+interface HabitProps {
+  difficultySystemSettings: SystemSetting[];
+  data: any;
+}
+
+const Habit = ({ difficultySystemSettings }: HabitProps) => {
   const router = useRouter();
 
   const { execute, status, value, error } = useAsync(getHabits);
 
   const habitList = value?.habitList;
+
+  useGetSystemSettings(difficultySystemSettings);
 
   return (
     <div className={classes.container}>
@@ -68,8 +78,20 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  try {
+    var systemSettingsResponse = await getSystemSettings(undefined, {
+      category: "DIFFICULTY",
+    });
+  } catch (error) {
+    return {
+      notFound: true,
+    };
+  }
+
   return {
-    props: {},
+    props: {
+      difficultySystemSettings: systemSettingsResponse.systemSettings,
+    },
   };
 };
 
