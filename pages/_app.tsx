@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 import { Layout } from "antd";
 import AppNavigationBar from "../components/AppNavigationBar/AppNavigationBar";
-import App, { AppProps } from "next/app";
+import { AppProps } from "next/app";
 import { initializeFirebase } from "lib/firebase/setup";
 import { Provider as NexthAuthProvider } from "next-auth/client";
 import withRedux from "next-redux-wrapper";
