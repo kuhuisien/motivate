@@ -42,7 +42,10 @@ const Login = () => {
         password: values[formFieldNames.password],
       });
 
+      console.log(result);
+
       if (result?.error) {
+        console.log(result);
         setSubmitErrorMessage(result.error);
       } else {
         router.replace(PATHS.HOME.path);
@@ -79,11 +82,13 @@ const Login = () => {
 
         <SubmitButton loading={submitIsLoading}>LOGIN</SubmitButton>
 
-        {submitErrorMessage && (
-          <Typography.Text type="danger">{submitErrorMessage}</Typography.Text>
-        )}
-
         <SimpleButton onClick={googleSignIn}>Sign in with Google</SimpleButton>
+
+        {submitErrorMessage && (
+          <Typography.Text type="danger" className={classes.errorMessage}>
+            {submitErrorMessage}
+          </Typography.Text>
+        )}
 
         <div className={classes.button}>
           <SimpleButton

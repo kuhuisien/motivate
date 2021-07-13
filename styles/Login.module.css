@@ -11,3 +11,8 @@
 .button {
   margin-top: 8px;
 }
+
+.errorMessage {
+  display: flex;
+  margin: 1rem;
+}
