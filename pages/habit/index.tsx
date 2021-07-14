@@ -84,6 +84,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       category: "DIFFICULTY",
     });
   } catch (error) {
+    console.log(error);
     return {
       notFound: true,
     };
