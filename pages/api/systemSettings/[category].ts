@@ -61,6 +61,7 @@ async function handler(
       .json({ message: SUCCESS_MESSAGE, systemSettings: systemSettings });
     return;
   } catch (error) {
+    console.log(error);
     res.status(INTERNAL_SERVER_ERROR).json({
       ...GENERIC_SYSTEM_SETTING_LISTING_ERROR_RESPONSE,
       message: INTERNAL_SERVER_ERROR_MESSAGE,
