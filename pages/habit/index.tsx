@@ -19,6 +19,7 @@ interface HabitProps {
 }
 
 const Habit = ({ difficultySystemSettings }: HabitProps) => {
+  console.log(difficultySystemSettings);
   const router = useRouter();
 
   const { execute, status, value, error } = useAsync(getHabits);
