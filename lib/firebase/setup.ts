@@ -27,5 +27,4 @@ export const initializeFirebase = () => {
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
   }
-  console.log(firebase.app());
 };
