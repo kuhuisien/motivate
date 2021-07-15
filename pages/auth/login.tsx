@@ -42,10 +42,7 @@ const Login = () => {
         password: values[formFieldNames.password],
       });
 
-      console.log(result);
-
       if (result?.error) {
-        console.log(result);
         setSubmitErrorMessage(result.error);
       } else {
         router.replace(PATHS.HOME.path);

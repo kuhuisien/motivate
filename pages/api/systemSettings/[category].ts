@@ -38,12 +38,8 @@ async function handler(
       return;
     }
 
-    console.log("system settings get called");
-
     const data = req.query as GetSystemSettingRequestType;
     const { category } = data;
-
-    console.log("request query: ", category);
 
     var systemSettings: SystemSetting[] = [];
 
@@ -68,7 +64,6 @@ async function handler(
       .json({ message: SUCCESS_MESSAGE, systemSettings: systemSettings });
     return;
   } catch (error) {
-    console.log(error);
     res.status(INTERNAL_SERVER_ERROR).json({
       ...GENERIC_SYSTEM_SETTING_LISTING_ERROR_RESPONSE,
       message: INTERNAL_SERVER_ERROR_MESSAGE,

@@ -29,6 +29,4 @@ export const initializeFirebase = () => {
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
   }
-  console.log("API BASE URl");
-  console.log(process.env.NEXT_PUBLIC_VERCEL_URL);
 };
