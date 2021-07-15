@@ -84,14 +84,22 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       category: "DIFFICULTY",
     });
   } catch (error) {
-    return {
-      notFound: true,
-    };
+    // return {
+    //   notFound: true,
+    // };
   }
+
+  const temp: SystemSetting = {
+    category: "test",
+    code: "test code",
+    displayValue: "display value",
+    value: 1,
+    image: "/medium.png",
+  };
 
   return {
     props: {
-      difficultySystemSettings: systemSettingsResponse.systemSettings,
+      difficultySystemSettings: [temp], //systemSettingsResponse.systemSettings,
     },
   };
 };
