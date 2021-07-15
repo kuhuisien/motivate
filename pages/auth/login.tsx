@@ -8,7 +8,6 @@ import SubmitButton from "components/Buttons/SubmitButton/SubmitButton";
 import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
 import { signIn, useSession } from "next-auth/client";
 import { PATHS } from "lib/nav/routes";
-import { API_BASE_URL } from "lib/api/client/resource/configs/URL";
 
 const Login = () => {
   const router = useRouter();
@@ -16,7 +15,6 @@ const Login = () => {
   // prevent logged in user to access the page
   const [session, loading] = useSession();
   useEffect(() => {
-    console.log(API_BASE_URL);
     if (session) {
       router.replace(PATHS.HABIT.path);
     }
