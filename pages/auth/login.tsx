@@ -8,6 +8,9 @@ import SubmitButton from "components/Buttons/SubmitButton/SubmitButton";
 import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
 import { signIn, useSession } from "next-auth/client";
 import { PATHS } from "lib/nav/routes";
+import { initializeFirebase } from "lib/firebase/setup";
+
+initializeFirebase();
 
 const Login = () => {
   const router = useRouter();
