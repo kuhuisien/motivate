@@ -30,5 +30,5 @@ export const initializeFirebase = () => {
     firebase.initializeApp(firebaseConfig);
   }
   console.log("API BASE URl");
-  console.log(API_BASE_URL);
+  console.log(process.env.NEXT_PUBLIC_VERCEL_URL);
 };
