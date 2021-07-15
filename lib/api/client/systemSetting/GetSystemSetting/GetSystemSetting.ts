@@ -30,6 +30,7 @@ const constructUrl = (query: ApiQuery) => {
 
   // construct URL
   var url = `${GET_SYSTEM_SETTINGS_URL}/${param}`;
+  console.log(url);
   return url;
 };
 
