@@ -21,15 +21,16 @@ interface HabitProps {
 const Habit = ({ difficultySystemSettings }: HabitProps) => {
   const router = useRouter();
 
-  const { execute, status, value, error } = useAsync(getHabits);
+  //const { execute, status, value, error } = useAsync(getHabits);
 
-  const habitList = value?.habitList;
+  //const habitList = value?.habitList;
 
   useGetSystemSettings(difficultySystemSettings);
 
   return (
     <div className={classes.container}>
-      {status === "pending" ? (
+      <div>dummy habit page</div>
+      {/* {status === "pending" ? (
         <>
           <Skeleton
             active
@@ -62,7 +63,7 @@ const Habit = ({ difficultySystemSettings }: HabitProps) => {
             </Space>
           </>
         )
-      )}
+      )} */}
     </div>
   );
 };
