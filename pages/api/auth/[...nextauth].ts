@@ -8,6 +8,9 @@ import {
   LOGIN_NO_USER_RECORD_ERROR_MESSAGE,
   LOGIN_INCORRECT_PASSWORD_ERROR_MESSAGE,
 } from "lib/api/server/constant";
+import { initializeFirebase } from "lib/firebase/setup";
+
+initializeFirebase();
 
 export default NextAuth({
   session: {

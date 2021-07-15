@@ -23,10 +23,14 @@ const firebaseConfig = {
   measurementId: process.env.FIREBASE_MEASUREMENT_ID,
 };
 
-import { API_BASE_URL } from "lib/api/client/resource/configs/URL";
+import {
+  API_BASE_URL,
+  GET_SYSTEM_SETTINGS_URL,
+} from "lib/api/client/resource/configs/URL";
 
 export const initializeFirebase = () => {
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
   }
+  console.log(GET_SYSTEM_SETTINGS_URL);
 };
