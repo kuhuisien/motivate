@@ -21,16 +21,16 @@ interface HabitProps {
 const Habit = ({ difficultySystemSettings }: HabitProps) => {
   const router = useRouter();
 
-  //const { execute, status, value, error } = useAsync(getHabits);
+  const { execute, status, value, error } = useAsync(getHabits);
 
-  //const habitList = value?.habitList;
+  const habitList = value?.habitList;
 
   useGetSystemSettings(difficultySystemSettings);
 
   return (
     <div className={classes.container}>
       <div>dummy habit page</div>
-      {/* {status === "pending" ? (
+      {status === "pending" ? (
         <>
           <Skeleton
             active
@@ -63,7 +63,7 @@ const Habit = ({ difficultySystemSettings }: HabitProps) => {
             </Space>
           </>
         )
-      )} */}
+      )}
     </div>
   );
 };
@@ -84,23 +84,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       category: "DIFFICULTY",
     });
   } catch (error) {
-    console.log(error);
-    // return {
-    //   notFound: true,
-    // };
+    return {
+      notFound: true,
+    };
   }
-
-  const temp: SystemSetting = {
-    category: "test",
-    code: "test code",
-    displayValue: "display value",
-    value: 1,
-    image: "/medium.png",
-  };
 
   return {
     props: {
-      difficultySystemSettings: [temp], //systemSettingsResponse.systemSettings,
+      difficultySystemSettings: systemSettingsResponse.systemSettings,
     },
   };
 };

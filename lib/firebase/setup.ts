@@ -32,5 +32,4 @@ export const initializeFirebase = () => {
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
   }
-  console.log(GET_SYSTEM_SETTINGS_URL);
 };
