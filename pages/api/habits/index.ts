@@ -19,11 +19,8 @@ import {
   HabitDbRecordType,
   HabitType,
 } from "lib/types/habit.types";
-import { initializeFirebase } from "lib/firebase/setup";
 
 const GENERIC_HABIT_LISTING_ERROR_RESPONSE = { habitList: [] };
-
-initializeFirebase();
 
 async function handler(
   req: NextApiRequest,

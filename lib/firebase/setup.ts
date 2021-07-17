@@ -10,8 +10,6 @@ import firebase from "firebase/app";
 //import "firebase/auth";
 import "firebase/firestore";
 
-// TODO: Replace the following with your app's Firebase project configuration
-// For Firebase JavaScript SDK v7.20.0 and later, `measurementId` is an optional field
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
   authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -22,11 +20,6 @@ const firebaseConfig = {
   appId: process.env.FIREBASE_APP_ID,
   measurementId: process.env.FIREBASE_MEASUREMENT_ID,
 };
-
-import {
-  API_BASE_URL,
-  GET_SYSTEM_SETTINGS_URL,
-} from "lib/api/client/resource/configs/URL";
 
 export const initializeFirebase = () => {
   if (!firebase.apps.length) {

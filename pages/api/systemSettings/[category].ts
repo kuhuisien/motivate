@@ -23,8 +23,6 @@ import { initializeFirebase } from "lib/firebase/setup";
 
 const GENERIC_SYSTEM_SETTING_LISTING_ERROR_RESPONSE = { systemSettings: [] };
 
-initializeFirebase();
-
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<SystemSettingListingResponseType>
