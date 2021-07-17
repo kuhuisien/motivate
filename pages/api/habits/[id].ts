@@ -92,9 +92,10 @@ async function handler(
           const updatedHabitData = {
             ...habitData,
             taskTitle,
-            notes,
+            notes: notes || null,
             difficultyId,
           };
+
           const updateIndex = habits.indexOf(habitData);
           habits[updateIndex] = updatedHabitData;
 
@@ -125,6 +126,7 @@ async function handler(
       return;
     }
   } catch (error) {
+    console.log(error);
     res
       .status(INTERNAL_SERVER_ERROR)
       .json({ message: INTERNAL_SERVER_ERROR_MESSAGE });

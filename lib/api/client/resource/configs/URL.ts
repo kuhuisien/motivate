@@ -1,4 +1,8 @@
-export const API_BASE_URL = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api`;
+export const PROJECT_BASE_URL = process.env.NEXT_PUBLIC_VERCEL_URL
+  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+  : process.env.NEXT_PUBLIC_URL;
+
+export const API_BASE_URL = `${PROJECT_BASE_URL}/api`;
 
 // ==========================
 // Authentication
