@@ -1,4 +1,4 @@
-export const API_BASE_URL = `${process.env.NEXT_PUBLIC_VERCEL_URL}/api`;
+export const API_BASE_URL = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api`;
 
 // ==========================
 // Authentication
@@ -17,4 +17,4 @@ export const DELETE_HABIT_URL = `${API_BASE_URL}/habits`;
 // ==========================
 // SystemSetting
 // ==========================
-export const GET_SYSTEM_SETTINGS_URL = `/api/systemSettings`;
+export const GET_SYSTEM_SETTINGS_URL = `${API_BASE_URL}/systemSettings`;
