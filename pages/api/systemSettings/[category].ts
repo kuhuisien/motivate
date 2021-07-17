@@ -19,7 +19,6 @@ import {
   GetSystemSettingRequestType,
   SystemSetting,
 } from "lib/types/systemSetting.types";
-import { initializeFirebase } from "lib/firebase/setup";
 
 const GENERIC_SYSTEM_SETTING_LISTING_ERROR_RESPONSE = { systemSettings: [] };
 
