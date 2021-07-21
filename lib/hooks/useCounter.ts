@@ -1,13 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setSelectedHabit } from "lib/redux/habit/habitSlice";
-import { HabitType } from "lib/types/habit.types";
 import { SystemSetting } from "lib/types/systemSetting.types";
 import { setDifficultySettings } from "lib/redux/systemSetting";
-
-type SystemSettingsOperators = {
-  onLoad: () => void;
-};
 
 /**
  * Counter custom-hooks
