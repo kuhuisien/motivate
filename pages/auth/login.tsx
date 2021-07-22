@@ -16,7 +16,7 @@ const Login = () => {
   const [session, loading] = useSession();
   useEffect(() => {
     if (session) {
-      router.replace(PATHS.HABIT.path);
+      router.replace(PATHS.HOME.path);
     }
   }, [session]);
 

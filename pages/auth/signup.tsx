@@ -14,6 +14,7 @@ const Signup = () => {
 
   // prevent logged in user to access the page
   const [session, loading] = useSession();
+
   useEffect(() => {
     if (session) {
       router.replace(PATHS.HOME.path);
