@@ -4,6 +4,8 @@ import React from "react";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
 import { PATHS } from "lib/nav/routes";
+import { Canvas } from "react-three-fiber";
+import Box from "components/Three/Box/Box";
 
 const Home = () => {
   return (
@@ -14,7 +16,12 @@ const Home = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1>Welcome :)</h1>
+      <Canvas>
+        {/* <ambientLight />
+        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+        <pointLight position={[-10, -10, -10]} /> */}
+        <Box position={[0, 0, 0]} />
+      </Canvas>
     </div>
   );
 };
