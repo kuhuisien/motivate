@@ -46,18 +46,24 @@ const AppNavigationBar = () => {
   return (
     <>
       {showMainNav ? (
-        <Menu selectedKeys={[pathname]} mode="horizontal">
-          {NavItems.map((item) => (
-            <Menu.Item key={item.id} icon={item.icon}>
-              <Link href={item.id}>{item.text}</Link>
-            </Menu.Item>
-          ))}
+        <div className={classes.navContainer}>
+          <Menu selectedKeys={[pathname]} mode="horizontal">
+            {NavItems.map((item) => (
+              <Menu.Item
+                key={item.id}
+                icon={item.icon}
+                className={classes.navItem}
+              >
+                <Link href={item.id}>{item.text}</Link>
+              </Menu.Item>
+            ))}
+          </Menu>
           {session && (
-            <Menu.Item key={"logout"}>
+            <div className={classes.logoutButton}>
               <SimpleButton onClick={() => signOut()}>Logout</SimpleButton>
-            </Menu.Item>
+            </div>
           )}
-        </Menu>
+        </div>
       ) : (
         <div className={classes.flexBox}>
           {showBackButton && (

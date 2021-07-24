@@ -17,3 +17,17 @@
 .title {
   padding-top: 16px;
 }
+
+.navItem {
+  margin: 0 0.3rem !important;
+}
+
+.navContainer {
+  position: relative;
+}
+
+.logoutButton {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
