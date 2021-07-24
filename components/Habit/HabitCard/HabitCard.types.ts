@@ -6,5 +6,9 @@ export interface HabitCardProps {
 
   difficultySettings: SystemSetting[];
 
+  // event fired when the habit card is selected
   setSelectedHabit: (habit: HabitType) => void;
+
+  // event fired when habit card button is clicked
+  handleClick: (point: number) => void;
 }

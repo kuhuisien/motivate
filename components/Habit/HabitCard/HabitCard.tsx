@@ -11,6 +11,7 @@ const HabitCard = ({
   habit,
   difficultySettings,
   setSelectedHabit,
+  handleClick,
 }: HabitCardProps) => {
   const router = useRouter();
 
@@ -19,10 +20,17 @@ const HabitCard = ({
     router.push(PATHS.HABIT_EDIT.path);
   };
 
-  const hitButtonClickHandler = () => {};
+  const difficultySetting = difficultySettings.find(
+    (d) => d.code === habit.difficultyId
+  );
+
+  const hitButtonClickHandler = () => {
+    const value = difficultySetting?.value || 0;
+    handleClick(value);
+  };
 
   const difficultyAvatar = () => {
-    return difficultySettings.find((d) => d.code === habit.difficultyId)?.image;
+    return difficultySetting?.image;
   };
 
   return (

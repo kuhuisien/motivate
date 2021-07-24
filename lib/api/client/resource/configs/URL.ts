@@ -22,3 +22,8 @@ export const DELETE_HABIT_URL = `${API_BASE_URL}/habits`;
 // SystemSetting
 // ==========================
 export const GET_SYSTEM_SETTINGS_URL = `${API_BASE_URL}/systemSettings`;
+
+// ==========================
+// Point
+// ==========================
+export const GET_OR_UPDATE_POINT_URL = `${API_BASE_URL}/point`;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
 import { useRouter } from "next/router";
@@ -12,24 +12,79 @@ import { getHabits } from "lib/api/client/habit/GetHabits/getHabits";
 import { getSystemSettings } from "lib/api/client/systemSetting/GetSystemSetting/GetSystemSetting";
 import { SystemSetting } from "lib/types/systemSetting.types";
 import { useGetSystemSettings } from "lib/hooks/useCounter";
+import { getPoint } from "lib/api/client/point/GetPoint/GetPoint";
+import { updatePoint } from "lib/api/client/point/UpdatePoint/updatePoint";
+import { notification } from "antd";
+import { SmileOutlined } from "@ant-design/icons";
 
 interface HabitProps {
   difficultySystemSettings: SystemSetting[];
-  data: any;
 }
 
 const Habit = ({ difficultySystemSettings }: HabitProps) => {
   const router = useRouter();
 
-  const { execute, status, value, error } = useAsync(getHabits);
+  const {
+    execute: getHabitsExecute,
+    status: getHabitsStatus,
+    value: getHabitsValue,
+    error: getHabitsError,
+  } = useAsync(getHabits);
 
-  const habitList = value?.habitList;
+  const {
+    execute: getPointExecute,
+    status: getPointStatus,
+    value: getPointValue,
+    error: getPointError,
+  } = useAsync(getPoint);
 
+  const { execute: updatePointExecute, value: updatePointValue } = useAsync(
+    updatePoint,
+    false
+  );
+
+  const habitList = getHabitsValue?.habitList;
+
+  // save system settings to redux state
   useGetSystemSettings(difficultySystemSettings);
+
+  const [point, setPoint] = useState<number>(0);
+
+  // set user point on page load
+  useEffect(() => {
+    if (getPointValue) {
+      setPoint(getPointValue.point);
+    }
+  }, [getPointValue]);
+
+  // callback invoked when habit card button is clicked
+  const handleHabitCardButtonClick = async (increment: number) => {
+    const updatedPoint = point + increment;
+    setPoint(updatedPoint);
+
+    await updatePointExecute({ point: updatedPoint });
+  };
+
+  // display any notification message after updating point
+  useEffect(() => {
+    if (updatePointValue?.notificationMsg) {
+      openNotification(updatePointValue?.notificationMsg);
+    }
+  }, [updatePointValue]);
+
+  const openNotification = (notificationMsg: string) => {
+    notification.open({
+      message: "You unlocked a prize!",
+      description: notificationMsg,
+      icon: <SmileOutlined style={{ color: "#108ee9" }} />,
+      placement: "bottomRight",
+      duration: 3,
+    });
+  };
 
   return (
     <div className={classes.container}>
-      {status === "pending" ? (
+      {getHabitsStatus === "pending" || getPointStatus === "pending" ? (
         <>
           <Skeleton
             active
@@ -37,10 +92,13 @@ const Habit = ({ difficultySystemSettings }: HabitProps) => {
             className={classes.habitSkeleton}
           />
         </>
-      ) : status === "error" ? (
-        <div onClick={() => execute()}>{error}</div>
+      ) : getHabitsStatus === "error" ? (
+        <div onClick={() => getHabitsExecute()}>{getHabitsError}</div>
+      ) : getPointStatus === "error" ? (
+        <div onClick={() => getPointExecute()}>{getPointError}</div>
       ) : (
-        status === "success" && (
+        getHabitsStatus === "success" &&
+        getPointStatus === "success" && (
           <>
             <Space
               direction="vertical"
@@ -51,6 +109,7 @@ const Habit = ({ difficultySystemSettings }: HabitProps) => {
                 <HabitCardContainer
                   key={h.taskTitle}
                   habit={h}
+                  handleClick={handleHabitCardButtonClick}
                 ></HabitCardContainer>
               ))}
 
@@ -79,7 +138,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   try {
-    var systemSettingsResponse = await getSystemSettings(undefined, {
+    var difficultySystemSettingsResponse = await getSystemSettings(undefined, {
       category: "DIFFICULTY",
     });
   } catch (error) {
@@ -91,7 +150,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      difficultySystemSettings: systemSettingsResponse.systemSettings,
+      difficultySystemSettings: difficultySystemSettingsResponse.systemSettings,
     },
   };
 };
