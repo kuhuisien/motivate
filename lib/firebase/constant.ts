@@ -3,3 +3,4 @@ export const EMAIL_FIELD = "email";
 
 export const SYSTEM_SETTINGS_COLLECTION = "systemSettings";
 export const CATEGORY_FIELD = "category";
+export const VALUE_FIELD = "value";
