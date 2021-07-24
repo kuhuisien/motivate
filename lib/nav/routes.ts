@@ -3,7 +3,7 @@ import { AppPaths } from "./path.types";
 
 const AUTH_PATH = "/auth";
 const HABIT_PATH = "/habit";
-const REWARDS_PATH = "/rewards";
+const REWARDS_PATH = "/reward";
 
 export const PATHS: AppPaths = {
   HOME: {
