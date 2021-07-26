@@ -4,7 +4,7 @@ import React from "react";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
 import { PATHS } from "lib/nav/routes";
-import CharacterContainer from "components/Three/CharacterContainer/CharacterContainer";
+import BoxContainer from "components/Three/BoxContainer/BoxContainer";
 
 const Home = () => {
   return (
@@ -15,7 +15,7 @@ const Home = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <CharacterContainer />
+      <BoxContainer />
     </div>
   );
 };
