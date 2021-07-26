@@ -18,7 +18,7 @@ describe("AppNavigationBar general test", () => {
   globalRef.fetch = jest.fn().mockImplementation(() => mockFetchPromise);
 
   let wrapper: ReactWrapper;
-  const MENU_ITEM_COUNT = 3; //two feature MenuItem and one Logout button
+  const MENU_ITEM_COUNT = 2; //two feature MenuItem
 
   function renderAppNavigationBar() {
     return mount(<AppNavigationBar />);
@@ -56,7 +56,7 @@ describe("AppNavigationBar general test", () => {
   it("should render link in Menu Item component correctly", () => {
     expect(wrapper.find(Menu.Item).length).toBe(MENU_ITEM_COUNT);
 
-    for (let i = 0; i < MENU_ITEM_COUNT - 1; i++) {
+    for (let i = 0; i < MENU_ITEM_COUNT; i++) {
       const linkComponent = wrapper.find(Menu.Item).at(i).find(Link);
       expect(linkComponent.exists()).toEqual(true);
     }
