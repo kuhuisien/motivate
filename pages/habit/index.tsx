@@ -31,12 +31,12 @@ const Habit = ({ difficultySystemSettings }: HabitProps) => {
     error: getHabitsError,
   } = useAsync(getHabits);
 
-  const {
-    execute: getPointExecute,
-    status: getPointStatus,
-    value: getPointValue,
-    error: getPointError,
-  } = useAsync(getPoint);
+  // const {
+  //   execute: getPointExecute,
+  //   status: getPointStatus,
+  //   value: getPointValue,
+  //   error: getPointError,
+  // } = useAsync(getPoint);
 
   const { execute: updatePointExecute, value: updatePointValue } = useAsync(
     updatePoint,
@@ -51,11 +51,11 @@ const Habit = ({ difficultySystemSettings }: HabitProps) => {
   const [point, setPoint] = useState<number>(0);
 
   // set user point on page load
-  useEffect(() => {
-    if (getPointValue) {
-      setPoint(getPointValue.point);
-    }
-  }, [getPointValue]);
+  // useEffect(() => {
+  //   if (getPointValue) {
+  //     setPoint(getPointValue.point);
+  //   }
+  // }, [getPointValue]);
 
   // callback invoked when habit card button is clicked
   const handleHabitCardButtonClick = async (increment: number) => {
@@ -84,7 +84,7 @@ const Habit = ({ difficultySystemSettings }: HabitProps) => {
 
   return (
     <div className={classes.container}>
-      {getHabitsStatus === "pending" || getPointStatus === "pending" ? (
+      {/* {getHabitsStatus === "pending" || getPointStatus === "pending" ? (
         <>
           <Skeleton
             active
@@ -121,7 +121,7 @@ const Habit = ({ difficultySystemSettings }: HabitProps) => {
             </Space>
           </>
         )
-      )}
+      )} */}
     </div>
   );
 };
