@@ -4,11 +4,9 @@ import * as THREE from "three";
 import { BoxProps } from "./Box.types";
 
 const Box = ({ position }: BoxProps) => {
-  // This reference will give us direct access to the mesh
   const mesh = useRef<THREE.Mesh>();
 
-  // Set up state for the hovered and active state
-  const [active, setActive] = useState(false);
+  const [active, setActive] = useState(true);
 
   // Rotate mesh every frame, this is outside of React without overhead
   useFrame(() => {

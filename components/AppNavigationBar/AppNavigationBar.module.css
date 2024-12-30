@@ -1,4 +1,4 @@
-.flexBox {
+.header {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -7,7 +7,7 @@
 .backButtonContainer {
   border: 0;
   position: absolute;
-  left: 0;
+  left: 8px;
 }
 
 .backButton {
@@ -28,6 +28,6 @@
 
 .logoutButton {
   position: absolute;
-  right: 0;
+  right: 15px;
   top: 0;
 }

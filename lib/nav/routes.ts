@@ -3,7 +3,7 @@ import { AppPaths } from "./path.types";
 
 const AUTH_PATH = "/auth";
 const HABIT_PATH = "/habit";
-const REWARDS_PATH = "/reward";
+//const REWARDS_PATH = "/reward";
 
 export const PATHS: AppPaths = {
   HOME: {
@@ -13,24 +13,24 @@ export const PATHS: AppPaths = {
   },
   HABIT: {
     path: HABIT_PATH,
-    displayName: TITLES.HABITS,
+    displayName: null,
     allowGoBackInHistory: false,
   },
   HABIT_CREATE: {
     path: `${HABIT_PATH}/create`,
-    displayName: TITLES.HABITS,
+    displayName: TITLES.CREATE,
     allowGoBackInHistory: true,
   },
   HABIT_EDIT: {
     path: `${HABIT_PATH}/edit`,
-    displayName: TITLES.HABITS,
+    displayName: TITLES.EDIT,
     allowGoBackInHistory: true,
   },
-  REWARDS: {
-    path: REWARDS_PATH,
-    displayName: TITLES.REWARDS,
-    allowGoBackInHistory: false,
-  },
+  // REWARDS: {
+  //   path: REWARDS_PATH,
+  //   displayName: TITLES.REWARDS,
+  //   allowGoBackInHistory: false,
+  // },
   SIGNUP: {
     path: `${AUTH_PATH}/signup`,
     displayName: null,

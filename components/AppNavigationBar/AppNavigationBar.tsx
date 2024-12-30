@@ -1,32 +1,13 @@
 import React from "react";
-import { Menu, Typography, Button } from "antd";
-import { NavigationBarItem } from "./AppNavigationBar.types";
-import {
-  MailOutlined,
-  AppstoreOutlined,
-  SettingOutlined,
-  RollbackOutlined,
-} from "@ant-design/icons";
+import { Typography, Button } from "antd";
+import { RollbackOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
 import { signOut, useSession } from "next-auth/react";
-import { PATHS } from "lib/nav/routes";
 import { retrievePath } from "lib/nav/retrievePath";
 import classes from "./AppNavigationBar.module.css";
 
-const NavItems: NavigationBarItem[] = [
-  {
-    id: PATHS.HABIT.path,
-    text: PATHS.HABIT.displayName,
-    icon: <SettingOutlined />,
-  },
-  {
-    id: PATHS.REWARDS.path,
-    text: PATHS.REWARDS.displayName,
-    icon: <MailOutlined />,
-  },
-];
+const APP_NAME = "Aspiro";
 
 const AppNavigationBar = () => {
   const router = useRouter();
@@ -35,37 +16,15 @@ const AppNavigationBar = () => {
 
   const { data: session } = useSession();
 
-  const showMainNav =
-    pathname === PATHS.HOME.path ||
-    NavItems.find((n) => n.id == pathname) !== undefined;
+  const title = path?.displayName || APP_NAME;
 
-  const title = path?.displayName;
   const showBackButton = path?.allowGoBackInHistory;
   const goBack = () => router.back();
 
   return (
     <>
-      {showMainNav ? (
-        <div className={classes.navContainer}>
-          <Menu selectedKeys={[pathname]} mode="horizontal">
-            {NavItems.map((item) => (
-              <Menu.Item
-                key={item.id}
-                icon={item.icon}
-                className={classes.navItem}
-              >
-                <Link href={item.id}>{item.text}</Link>
-              </Menu.Item>
-            ))}
-          </Menu>
-          {session && (
-            <div className={classes.logoutButton}>
-              <SimpleButton onClick={() => signOut()}>Logout</SimpleButton>
-            </div>
-          )}
-        </div>
-      ) : (
-        <div className={classes.flexBox}>
+      {
+        <div className={classes.header}>
           {showBackButton && (
             <Button className={classes.backButtonContainer} onClick={goBack}>
               <RollbackOutlined className={classes.backButton} />
@@ -75,8 +34,14 @@ const AppNavigationBar = () => {
           <Typography.Title level={3} className={classes.title}>
             {title}
           </Typography.Title>
+
+          {session && (
+            <div className={classes.logoutButton}>
+              <SimpleButton onClick={() => signOut()}>Logout</SimpleButton>
+            </div>
+          )}
         </div>
-      )}
+      }
     </>
   );
 };

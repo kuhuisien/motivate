@@ -48,7 +48,7 @@ const HabitCard = ({
       </Card>
       <div className={classes.hitButton}>
         <SimpleButton type="text" onClick={hitButtonClickHandler}>
-          HIT
+          Crush It
         </SimpleButton>
       </div>
     </div>

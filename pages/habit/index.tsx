@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -12,14 +12,19 @@ import { getHabits } from "lib/api/client/habit/GetHabits/getHabits";
 import { getSystemSettings } from "lib/api/client/systemSetting/GetSystemSetting/GetSystemSetting";
 import { SystemSetting } from "lib/types/systemSetting.types";
 import { useGetSystemSettings } from "lib/hooks/useCounter";
-import { getPoint } from "lib/api/client/point/GetPoint/GetPoint";
-import { updatePoint } from "lib/api/client/point/UpdatePoint/updatePoint";
 import { notification } from "antd";
-import { SmileOutlined } from "@ant-design/icons";
 
 interface HabitProps {
   difficultySystemSettings: SystemSetting[];
 }
+
+const MESSAGES = [
+  "You did it! 🎉",
+  "You’re unstoppable! 🚀",
+  "Goal Unlocked! 🔓",
+  "You’re on fire! 🔥",
+  "High five! 🖐️",
+];
 
 const Habit = ({ difficultySystemSettings }: HabitProps) => {
   const router = useRouter();
@@ -31,80 +36,49 @@ const Habit = ({ difficultySystemSettings }: HabitProps) => {
     error: getHabitsError,
   } = useAsync(getHabits);
 
-  const {
-    execute: getPointExecute,
-    status: getPointStatus,
-    value: getPointValue,
-    error: getPointError,
-  } = useAsync(getPoint);
-
-  const { execute: updatePointExecute, value: updatePointValue } = useAsync(
-    updatePoint,
-    false
-  );
-
   const habitList = getHabitsValue?.habitList;
 
   // save system settings to redux state
   useGetSystemSettings(difficultySystemSettings);
 
-  const [point, setPoint] = useState<number>(0);
-
-  // set user point on page load
-  useEffect(() => {
-    if (getPointValue) {
-      setPoint(getPointValue.point);
-    }
-  }, [getPointValue]);
-
   // callback invoked when habit card button is clicked
-  const handleHabitCardButtonClick = async (increment: number) => {
-    const updatedPoint = point + increment;
-    setPoint(updatedPoint);
+  const handleHabitCardButtonClick = (increment: number) => {
+    const randomIndex = Math.floor(Math.random() * MESSAGES.length);
+    const notificationMsg = MESSAGES[randomIndex];
 
-    await updatePointExecute({ point: updatedPoint });
-  };
-
-  // display any notification message after updating point
-  useEffect(() => {
-    if (updatePointValue?.notificationMsg) {
-      openNotification(updatePointValue?.notificationMsg);
-    }
-  }, [updatePointValue]);
-
-  const openNotification = (notificationMsg: string) => {
     notification.open({
-      message: "You unlocked a prize!",
-      description: notificationMsg,
-      icon: <SmileOutlined style={{ color: "#108ee9" }} />,
+      message: notificationMsg,
       placement: "bottomRight",
-      duration: 3,
+      duration: 2,
     });
   };
 
   return (
     <div className={classes.container}>
-      {getHabitsStatus === "pending" || getPointStatus === "pending" ? (
-        <>
-          <Skeleton
-            active
-            paragraph={{ rows: 8 }}
-            className={classes.habitSkeleton}
-          />
-        </>
+      {getHabitsStatus === "pending" ? (
+        <Skeleton
+          active
+          paragraph={{ rows: 8 }}
+          className={classes.habitSkeleton}
+        />
       ) : getHabitsStatus === "error" ? (
         <div onClick={() => getHabitsExecute()}>{getHabitsError}</div>
-      ) : getPointStatus === "error" ? (
-        <div onClick={() => getPointExecute()}>{getPointError}</div>
       ) : (
-        getHabitsStatus === "success" &&
-        getPointStatus === "success" && (
+        getHabitsStatus === "success" && (
           <>
             <Space
               direction="vertical"
               align="center"
               className={classes.habit}
             >
+              <div className={classes.createButtonContainer}>
+                <SimpleButton
+                  onClick={() => router.push(PATHS.HABIT_CREATE.path)}
+                >
+                  CREATE
+                </SimpleButton>
+              </div>
+
               {habitList?.map((h) => (
                 <HabitCardContainer
                   key={h.taskTitle}
@@ -112,12 +86,6 @@ const Habit = ({ difficultySystemSettings }: HabitProps) => {
                   handleClick={handleHabitCardButtonClick}
                 ></HabitCardContainer>
               ))}
-
-              <SimpleButton
-                onClick={() => router.push(PATHS.HABIT_CREATE.path)}
-              >
-                CREATE
-              </SimpleButton>
             </Space>
           </>
         )

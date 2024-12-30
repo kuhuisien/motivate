@@ -16,3 +16,7 @@
 .habit .ant-space-item {
   width: 100% !important;
 }
+
+.createButtonContainer {
+  margin-bottom: 1rem;
+}
