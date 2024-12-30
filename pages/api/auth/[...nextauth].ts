@@ -17,10 +17,10 @@ import { initializeFirebase } from "lib/firebase/setup";
 initializeFirebase();
 
 export default NextAuth({
-  session: {
-    // Use JWT for session handling
-    strategy: "jwt",
-  },
+  // session: {
+  //   // Use JWT for session handling
+  //   strategy: "jwt",
+  // },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_ID || "",

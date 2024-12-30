@@ -129,7 +129,6 @@ const Habit = ({ difficultySystemSettings }: HabitProps) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession({ req: context.req });
 
-  console.log(session);
   if (!session) {
     return {
       redirect: {
@@ -149,8 +148,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       notFound: true,
     };
   }
-
-  console.log(difficultySystemSettingsResponse);
 
   return {
     props: {

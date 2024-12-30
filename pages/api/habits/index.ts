@@ -47,7 +47,7 @@ async function handler(
       return;
     }
 
-    const userId = (session.id as string) || session.user?.email || "";
+    const userId = session.user?.email || "";
 
     // retrieve db records
     var userRef = firebase.firestore().collection(USERS_COLLECTION).doc(userId);

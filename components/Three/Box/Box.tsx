@@ -23,7 +23,7 @@ const Box = ({ position }: BoxProps) => {
   return (
     <mesh
       position={position}
-      ref={mesh}
+      ref={mesh as any}
       scale={active ? [2, 2, 2] : [1.5, 1.5, 1.5]}
       onClick={(e) => setActive(!active)}
     >

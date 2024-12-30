@@ -47,7 +47,7 @@ async function handler(
     }
     const decodedId = decodeURIComponent(id as string);
 
-    const userId = (session.id as string) || session.user?.email || "";
+    const userId = session.user?.email || "";
 
     var userRef = firebase.firestore().collection(USERS_COLLECTION).doc(userId);
 

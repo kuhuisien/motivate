@@ -15,9 +15,12 @@ const deleteHabit = async (
     );
     return parseResponse(response, DELETE_HABIT_URL);
   } catch (error) {
-    const errorMessage = error?.response?.data?.message;
-    console.error(errorMessage);
-    throw new Error(errorMessage);
+    console.error(error);
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error?.response?.data?.message || error.message;
+      throw new Error(errorMessage);
+    }
+    throw new Error("An error occured");
   }
 };
 

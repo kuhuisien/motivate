@@ -16,11 +16,12 @@ const getSystemSettings = async (
     );
     return parseResponse(response, GET_SYSTEM_SETTINGS_URL);
   } catch (error) {
-    const errorMessage = error?.response?.data?.message;
-    const statusCode = error?.response?.status;
-    console.error(errorMessage);
-    console.error(statusCode);
-    throw new Error(`${errorMessage} (status code: ${statusCode})`);
+    console.error(error);
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error?.response?.data?.message || error.message;
+      throw new Error(errorMessage);
+    }
+    throw new Error("An error occured");
   }
 };
 

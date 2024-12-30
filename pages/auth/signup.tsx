@@ -46,13 +46,14 @@ const Signup = () => {
       // sign up error handling is in catch block
       // since failed signin will cause error to be thrown
       await signup(email, password);
-
+      console.log("aa");
       // direct sign in after successful sign up
       const result = await signIn("credentials", {
         redirect: false,
         email: values[formFieldNames.email],
         password: values[formFieldNames.password],
       });
+      console.log("bb");
 
       if (result?.error) {
         setSubmitErrorMessage(result.error);
@@ -60,7 +61,13 @@ const Signup = () => {
         router.replace(PATHS.HOME.path);
       }
     } catch (error) {
-      setSubmitErrorMessage(error.message);
+      console.log(error);
+      if (error instanceof Error) {
+        console.error(error);
+        setSubmitErrorMessage(error.message);
+      } else {
+        setSubmitErrorMessage("An error occurred");
+      }
     } finally {
       setSubmitIsLoading(false);
     }

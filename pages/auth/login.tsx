@@ -48,8 +48,8 @@ const Login = () => {
         router.replace(PATHS.HOME.path);
       }
     } catch (error) {
-      console.log(error);
-      setSubmitErrorMessage(error);
+      console.error(error);
+      setSubmitErrorMessage(error as string);
     } finally {
       setSubmitIsLoading(false);
     }

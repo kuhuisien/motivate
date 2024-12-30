@@ -47,7 +47,7 @@ async function handler(
     }
 
     // get the user reference in db
-    const userId = (session.id as string) || session.user?.email || "";
+    const userId = session.user?.email || "";
     var userRef = firebase.firestore().collection(USERS_COLLECTION).doc(userId);
 
     var userSnapshot = await userRef.get();
