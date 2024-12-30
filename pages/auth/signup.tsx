@@ -4,7 +4,7 @@ import { Form, Typography } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import TextField from "components/FormInputs/TextField/TextField";
 import SubmitButton from "components/Buttons/SubmitButton/SubmitButton";
-import { useSession, signIn } from "next-auth/client";
+import { useSession, signIn } from "next-auth/react";
 import { PATHS } from "lib/nav/routes";
 import { useRouter } from "next/router";
 import { signup } from "lib/api/client/auth/Signup/signup";
@@ -13,7 +13,7 @@ const Signup = () => {
   const router = useRouter();
 
   // prevent logged in user to access the page
-  const [session, loading] = useSession();
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     if (session) {
@@ -66,7 +66,7 @@ const Signup = () => {
     }
   };
 
-  if (loading) {
+  if (status === "loading") {
     return null;
   }
 

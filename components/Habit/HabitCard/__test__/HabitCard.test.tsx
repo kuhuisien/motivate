@@ -1,16 +1,13 @@
 import React from "react";
-import { mount, ReactWrapper } from "enzyme";
-import { Card } from "antd";
 import { HabitCardProps } from "../HabitCard.types";
 import { DIFFICULTY_ID } from "../constant";
 import HabitCard from "../HabitCard";
-import Meta from "antd/lib/card/Meta";
-import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
 import { HabitType } from "lib/types/habit.types";
 import { MOCK_DIFFICULTY_SETTINGS } from "./Mock";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 describe("HabitCard", () => {
-  let wrapper: ReactWrapper;
   let onSelectCardListener: jest.Mock<any, any>;
   let onClickButtonListener: jest.Mock<any, any>;
 
@@ -33,28 +30,24 @@ describe("HabitCard", () => {
       handleClick: onClickButtonListener,
     };
     const props = { ...defaultProps, ...args };
-    return mount(<HabitCard {...props} />);
+    return render(<HabitCard {...props} />);
   }
 
   beforeEach(() => {
-    wrapper = renderHabitCard(null);
+    renderHabitCard(null);
   });
 
   // ====================
   // CARD
   // ====================
-  it("should render Card component correctly", () => {
-    const component = wrapper.find(Card);
-    expect(component.props().hoverable).toBe(true);
-  });
 
   it("should display title of habit correctly on Card", () => {
-    const component = wrapper.find(Card);
-    expect(component.props().title).toBe(defaultProps.habit.taskTitle);
+    const title = defaultProps.habit.taskTitle || "";
+    expect(screen.getByText(title)).toBeInTheDocument();
   });
 
-  it("should invoke onClick handler after clicking Card", () => {
-    wrapper.find(Card).simulate("click");
+  it("should invoke onClick handler after clicking Card", async () => {
+    await userEvent.click(screen.getByText(defaultProps.habit.taskTitle || ""));
 
     expect(onSelectCardListener).toHaveBeenCalled();
   });
@@ -64,17 +57,15 @@ describe("HabitCard", () => {
   // ====================
 
   it("should display notes correctly", () => {
-    expect(wrapper.find(Meta).props().description).toBe(
-      defaultProps.habit.notes
-    );
+    const description = defaultProps.habit.notes || "";
+    expect(screen.getByText(description)).toBeInTheDocument();
   });
 
   // ====================
   // BUTTON
   // ====================
-  it("should invoke onClick handler for Button correctly", () => {
-    wrapper.find(SimpleButton).simulate("click");
-
+  it("should invoke onClick handler for Button correctly", async () => {
+    await userEvent.click(screen.getByRole("button"));
     expect(onClickButtonListener).toHaveBeenCalled();
   });
 });

@@ -2,7 +2,7 @@ import Head from "next/head";
 import styles from "styles/Home.module.css";
 import React from "react";
 import { GetServerSideProps } from "next";
-import { getSession } from "next-auth/client";
+import { getSession } from "next-auth/react";
 import { PATHS } from "lib/nav/routes";
 import BoxContainer from "components/Three/BoxContainer/BoxContainer";
 

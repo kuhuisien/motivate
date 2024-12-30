@@ -1,62 +1,42 @@
 import React from "react";
-import { shallow, ShallowWrapper } from "enzyme";
-import configureStore, { MockStoreEnhanced } from "redux-mock-store";
-import { initialState as systemSettingInitialState } from "lib/redux/systemSetting";
 import HabitCardContainer from "../HabitCardContainer";
-import HabitCard from "../HabitCard";
-import { SystemSettingState } from "lib/redux/systemSetting/systemSetting.types";
 import { MOCK_DIFFICULTY_SETTINGS } from "./Mock";
-import { setSelectedHabit } from "lib/redux/habit";
 import { HabitType } from "lib/types/habit.types";
+import { renderWithProviders } from "lib/TestUtil/ProviderWrapper/ReduxProviderWrapper";
+import { DIFFICULTY_ID } from "../constant";
+import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
-const configureMockStore = configureStore();
-
-describe("My Info Profile Container", () => {
-  let wrapper: ShallowWrapper;
-  let systemSettingState: SystemSettingState;
-  let store: MockStoreEnhanced<unknown, {}>;
+describe("Habit Card Container", () => {
+  let onSelectCardListener: jest.Mock<any, any>;
 
   beforeEach(() => {
-    // ensure clean copies of every state before every test case
-    systemSettingState = {
-      ...systemSettingInitialState,
-      difficultySettings: MOCK_DIFFICULTY_SETTINGS,
+    const MOCK_HABIT: HabitType = {
+      taskTitle: "dummy title",
+      notes: "dummy notes",
+      difficultyId: DIFFICULTY_ID.EASY,
+      createdAt: new Date().toISOString(),
     };
 
-    store = configureMockStore({
-      systemSetting: systemSettingState,
-    });
-    wrapper = shallow(<HabitCardContainer store={store} />);
-  });
+    onSelectCardListener = jest.fn();
 
-  // ============================
-  // Tests for Map State to Props
-  // ============================
-
-  it("should render the connected component", () => {
-    expect(wrapper.find(HabitCard)).toHaveLength(1);
-  });
-
-  it("should map difficultySettings correctly", () => {
-    expect(wrapper.find(HabitCard).props().difficultySettings).toHaveLength(
-      MOCK_DIFFICULTY_SETTINGS.length
+    renderWithProviders(
+      <HabitCardContainer
+        habit={MOCK_HABIT}
+        handleClick={onSelectCardListener}
+      />,
+      {
+        preloadedState: {
+          systemSetting: {
+            difficultySettings: MOCK_DIFFICULTY_SETTINGS,
+          },
+        },
+      }
     );
   });
 
-  // ============================
-  // Tests for Map Dispatch to Props
-  // ============================
-
-  it("should be able to invoke resetPreventDirectBackNavigationState", () => {
-    const habit: HabitType = {
-      taskTitle: "dummyTaskTitle",
-      notes: "dummyNotes",
-      difficultyId: "dummyDifficultyId",
-      createdAt: "dummyCreatedAt",
-    };
-    const component = wrapper.find(HabitCard);
-    component.props().setSelectedHabit(habit);
-    const expectedActions = [setSelectedHabit(habit)];
-    expect(store.getActions()).toEqual(expectedActions);
+  it("should be able to invoke button click correctly", async () => {
+    await userEvent.click(screen.getByRole("button"));
+    expect(onSelectCardListener).toHaveBeenCalledWith(1);
   });
 });

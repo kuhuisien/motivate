@@ -9,8 +9,7 @@ const SimpleButton = ({
   size = "middle",
   loading = false,
   disabled = false,
-  icon,
-  onClick,
+  ...restProps
 }: SimpleButtonProps) => {
   return (
     <Button
@@ -19,8 +18,7 @@ const SimpleButton = ({
       size={size}
       loading={loading}
       disabled={disabled}
-      icon={icon}
-      onClick={onClick}
+      {...restProps}
     >
       {children}
     </Button>

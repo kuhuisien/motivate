@@ -15,7 +15,7 @@ import {
 } from "lib/api/server/constant";
 import { GeneralResponse } from "lib/types/common/data.types";
 import { HabitType, HabitDbRecordType } from "lib/types/habit.types";
-import { getSession } from "next-auth/client";
+import { getSession } from "next-auth/react";
 import firebase from "firebase";
 import { USERS_COLLECTION } from "lib/firebase/constant";
 

@@ -33,6 +33,13 @@ const store = configureStore({
   reducer: rootReducer,
 });
 
+export function setupStore(preloadedState?: Partial<RootState>) {
+  return configureStore({
+    reducer: rootReducer,
+    preloadedState,
+  });
+}
+export type AppStore = ReturnType<typeof setupStore>;
 /**
  * The derived dispatch function type from the store.
  *

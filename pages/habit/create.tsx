@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { GetServerSideProps } from "next";
-import { getSession } from "next-auth/client";
+import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { Form, Typography } from "antd";
 import { PATHS } from "lib/nav/routes";

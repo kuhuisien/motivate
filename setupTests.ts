@@ -2,15 +2,8 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 import "jsdom-global/register";
-import Enzyme from "enzyme";
-import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
-
-// Enzyme needs to be installed with a configured adapter that
-// corresponds to the React version we're using for unit tests to work.
-//configure({ adapter: new EnzymeReactAdapter() });
-Enzyme.configure({ adapter: new Adapter() });
 
 /**
  * == GLOBAL MOCKS ==
@@ -45,9 +38,9 @@ jest.mock("next/router", () => ({
   }),
 }));
 
-jest.mock("next-auth/client", () => ({
+jest.mock("next-auth/react", () => ({
   // ensure functionalities of original module are preserved
-  ...jest.requireActual<{}>("next-auth/client"),
+  ...jest.requireActual<{}>("next-auth/react"),
 
   // mock hooks within unit test to avoid error message in console, and to mock the session for testing auth UI
   useSession: () => [

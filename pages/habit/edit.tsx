@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { GetServerSideProps } from "next";
-import { getSession } from "next-auth/client";
+import { getSession } from "next-auth/react";
 import { Form, Typography } from "antd";
 import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
 import { PATHS } from "lib/nav/routes";

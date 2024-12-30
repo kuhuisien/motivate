@@ -10,7 +10,7 @@ import {
 import { useRouter } from "next/router";
 import Link from "next/link";
 import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
-import { signOut, useSession } from "next-auth/client";
+import { signOut, useSession } from "next-auth/react";
 import { PATHS } from "lib/nav/routes";
 import { retrievePath } from "lib/nav/retrievePath";
 import classes from "./AppNavigationBar.module.css";
@@ -33,7 +33,7 @@ const AppNavigationBar = () => {
   const pathname = router.pathname;
   const path = retrievePath(pathname);
 
-  const [session] = useSession();
+  const { data: session } = useSession();
 
   const showMainNav =
     pathname === PATHS.HOME.path ||

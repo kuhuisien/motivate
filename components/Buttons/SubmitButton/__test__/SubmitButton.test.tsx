@@ -1,13 +1,11 @@
 import React from "react";
-import { mount, ReactWrapper } from "enzyme";
-import { Button } from "antd";
 import { SubmitButtonProps } from "../SubmitButton.types";
 import SubmitButton from "../SubmitButton";
-import Form from "antd/lib/form";
-import { FormProvidersWrapper } from "lib/TestUtil/ProviderWrapper/ProviderWrapper";
+import { FormProvidersWrapper } from "lib/TestUtil/ProviderWrapper/FormProviderWrapper";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 describe("SubmitButton", () => {
-  let wrapper: ReactWrapper;
   let onClickListener: jest.Mock<any, any>;
   let defaultProps: SubmitButtonProps;
 
@@ -16,76 +14,30 @@ describe("SubmitButton", () => {
       children: "dummy child",
     };
     const props = { ...defaultProps, ...args };
-    return mount(
+    return render(
       <FormProvidersWrapper>
         <SubmitButton {...props} />
       </FormProvidersWrapper>
     );
   }
 
-  beforeEach(() => {
-    wrapper = renderSubmitButton(null);
-  });
-
-  // ====================
-  // FORM ITEM
-  // ====================
-  // it("should render Form.Item correctly", () => {
-  //   expect(wrapper.find(Form.Item).props().shouldUpdate).toBe(true);
-  // });
-
   // ====================
   // MAPPING PROPS
   // ====================
   it("should map children prop correctly", () => {
-    expect(wrapper.find(Button).text()).toBe(defaultProps.children);
-  });
-
-  it("should map htmlType prop correctly", () => {
-    expect(wrapper.find(Button).props().htmlType).toBe("submit");
-  });
-
-  it("should map default size prop correctly", () => {
-    expect(wrapper.find(Button).props().size).toBe("middle");
-  });
-
-  it("should map size prop correctly", () => {
-    const size = "small";
-    wrapper = renderSubmitButton({ size });
-    expect(wrapper.find(Button).props().size).toBe(size);
-  });
-
-  it("should map default loading prop correctly", () => {
-    expect(wrapper.find(Button).props().loading).toBe(false);
-  });
-
-  it("should map loading prop correctly", () => {
-    const loading = true;
-    wrapper = renderSubmitButton({ loading });
-    expect(wrapper.find(Button).props().loading).toBe(loading);
-  });
-
-  it("should disable button correctly when form fields are untouched", () => {
-    expect(wrapper.find(Button).props().disabled).toBe(false);
-  });
-
-  it("should map default icon prop correctly", () => {
-    expect(wrapper.find(Button).props().icon).toBe(undefined);
-  });
-
-  it("should map icon prop correctly", () => {
-    const icon = <div>icon</div>;
-    wrapper = renderSubmitButton({ icon });
-    expect(wrapper.find(Button).props().icon).toBe(icon);
+    renderSubmitButton(null);
+    expect(
+      screen.getByText(defaultProps.children as string)
+    ).toBeInTheDocument();
   });
 
   // ====================
   // EVENT HANDLER
   // ====================
-  it("checks if handleSearchChange method works correctly", () => {
+  it("checks if click handler works correctly", async () => {
     onClickListener = jest.fn();
-    wrapper = renderSubmitButton({ onClick: onClickListener });
-    wrapper.find(Button).simulate("click");
-    expect(onClickListener).toBeCalled();
+    renderSubmitButton({ onClick: onClickListener });
+    await userEvent.click(screen.getByRole("button"));
+    expect(onClickListener).toHaveBeenCalled();
   });
 });

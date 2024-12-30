@@ -14,7 +14,7 @@ import {
   PUT,
 } from "lib/api/server/constant";
 import { PointResponseType, Point } from "lib/types/point.types";
-import { getSession } from "next-auth/client";
+import { getSession } from "next-auth/react";
 import firebase from "firebase";
 import {
   USERS_COLLECTION,

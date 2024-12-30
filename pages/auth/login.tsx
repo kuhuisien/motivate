@@ -6,14 +6,14 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import TextField from "components/FormInputs/TextField/TextField";
 import SubmitButton from "components/Buttons/SubmitButton/SubmitButton";
 import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
-import { signIn, useSession } from "next-auth/client";
+import { signIn, useSession } from "next-auth/react";
 import { PATHS } from "lib/nav/routes";
 
 const Login = () => {
   const router = useRouter();
 
   // prevent logged in user to access the page
-  const [session, loading] = useSession();
+  const { data: session, status } = useSession();
   useEffect(() => {
     if (session) {
       router.replace(PATHS.HOME.path);
@@ -41,13 +41,14 @@ const Login = () => {
         email: values[formFieldNames.email],
         password: values[formFieldNames.password],
       });
-
+      console.log(result);
       if (result?.error) {
         setSubmitErrorMessage(result.error);
       } else {
         router.replace(PATHS.HOME.path);
       }
     } catch (error) {
+      console.log(error);
       setSubmitErrorMessage(error);
     } finally {
       setSubmitIsLoading(false);
@@ -58,7 +59,7 @@ const Login = () => {
     await signIn("google");
   };
 
-  if (loading) return null;
+  if (status === "loading") return null;
 
   return (
     <div className={classes.container}>

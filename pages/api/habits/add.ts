@@ -15,7 +15,7 @@ import {
   INTERNAL_SERVER_ERROR_MESSAGE,
   METHOD_NOT_ALLOW_ERROR_MESSAGE,
 } from "lib/api/server/constant";
-import { getSession } from "next-auth/client";
+import { getSession } from "next-auth/react";
 import { HabitType, HabitDbRecordType } from "lib/types/habit.types";
 import { GeneralResponse } from "lib/types/common/data.types";
 

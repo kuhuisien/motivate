@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { GetServerSideProps } from "next";
-import { getSession } from "next-auth/client";
+import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { Space, Skeleton } from "antd";
 import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
@@ -128,6 +128,8 @@ const Habit = ({ difficultySystemSettings }: HabitProps) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession({ req: context.req });
+
+  console.log(session);
   if (!session) {
     return {
       redirect: {
@@ -147,6 +149,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       notFound: true,
     };
   }
+
+  console.log(difficultySystemSettingsResponse);
 
   return {
     props: {

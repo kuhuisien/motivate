@@ -13,7 +13,7 @@ import {
   SUCCESS_MESSAGE,
   METHOD_NOT_ALLOW_ERROR_MESSAGE,
 } from "lib/api/server/constant";
-import { getSession } from "next-auth/client";
+import { getSession } from "next-auth/react";
 import {
   HabitListingResponseType,
   HabitDbRecordType,
