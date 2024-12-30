@@ -81,6 +81,7 @@ async function handler(
       .json({ message: SUCCESS_MESSAGE, habitList: habitsData });
     return;
   } catch (error) {
+    console.error(error);
     res.status(INTERNAL_SERVER_ERROR).json({
       ...GENERIC_HABIT_LISTING_ERROR_RESPONSE,
       message: INTERNAL_SERVER_ERROR_MESSAGE,

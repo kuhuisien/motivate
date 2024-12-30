@@ -125,7 +125,7 @@ async function handler(
       return;
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res
       .status(INTERNAL_SERVER_ERROR)
       .json({ message: INTERNAL_SERVER_ERROR_MESSAGE });

@@ -34,7 +34,8 @@ async function handler(
     const { email, password } = data;
 
     //email and password format validation
-    const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const emailRegex =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const emailResult = emailRegex.test(String(email).toLowerCase());
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
     const passwordResult = passwordRegex.test(String(password));
@@ -67,6 +68,7 @@ async function handler(
       return;
     }
   } catch (error) {
+    console.error(error);
     res
       .status(INTERNAL_SERVER_ERROR)
       .json({ message: INTERNAL_SERVER_ERROR_MESSAGE });

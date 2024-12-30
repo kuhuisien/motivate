@@ -119,7 +119,7 @@ async function handler(
       return;
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(INTERNAL_SERVER_ERROR).json({
       ...GENERIC_POINT_ERROR_RESPONSE,
       message: INTERNAL_SERVER_ERROR_MESSAGE,
