@@ -7,6 +7,7 @@ import { Typography } from "antd";
 import TextField from "components/FormInputs/TextField/TextField";
 import RadioButton from "components/FormInputs/RadioButton/RadioButton";
 import TextArea from "components/FormInputs/TextArea/Textarea";
+import CustomTagging from "./CustomTagging/CustomTagging";
 
 const RADIO_BUTTON_ICON_SIZE = 50;
 
@@ -19,6 +20,8 @@ export const formFieldNames = {
 const HabitFormField = ({
   habitState,
   difficultySettings,
+  tags,
+  setTags,
 }: HabitFormFieldProps) => {
   const difficultyLvlSelectionList = difficultySettings.map((d) => {
     return {
@@ -58,9 +61,11 @@ const HabitFormField = ({
         name={formFieldNames.difficulty}
         values={difficultyLvlSelectionList}
         defaultValue={
-          habitState?.difficultyId || difficultyLvlSelectionList[0].id
+          habitState?.difficultyId || difficultyLvlSelectionList?.[0]?.id
         }
       ></RadioButton>
+
+      <CustomTagging tags={tags} setTags={setTags} />
     </>
   );
 };

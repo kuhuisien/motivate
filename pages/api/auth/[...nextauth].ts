@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 //import Providers from "next-auth/providers";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
@@ -16,11 +16,11 @@ import { initializeFirebase } from "lib/firebase/setup";
 
 initializeFirebase();
 
-export default NextAuth({
-  // session: {
-  //   // Use JWT for session handling
-  //   strategy: "jwt",
-  // },
+export const authOptions: NextAuthOptions = {
+  session: {
+    // use JWT for session handling
+    strategy: "jwt",
+  },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_ID || "",
@@ -76,4 +76,6 @@ export default NextAuth({
     //   return session;
     // },
   },
-});
+};
+
+export default NextAuth(authOptions);

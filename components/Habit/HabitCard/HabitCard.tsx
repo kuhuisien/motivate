@@ -35,12 +35,7 @@ const HabitCard = ({
 
   return (
     <div className={classes.cardContainer}>
-      <Card
-        hoverable
-        onClick={cardClickHandler}
-        title={habit.taskTitle}
-        className={classes.card}
-      >
+      <Card hoverable onClick={cardClickHandler} title={habit.taskTitle}>
         <Meta
           avatar={<Avatar src={difficultyAvatar()} />}
           description={habit.notes}

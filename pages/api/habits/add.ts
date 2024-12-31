@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import firebase from "firebase/app";
 import "firebase/firestore";
-import { USERS_COLLECTION } from "lib/firebase/constant";
+import { HABITS_COLLECTION, USERS_COLLECTION } from "lib/firebase/constant";
 import {
   POST,
   BAD_RERQUEST_STATUS_CODE,
@@ -15,9 +15,10 @@ import {
   INTERNAL_SERVER_ERROR_MESSAGE,
   METHOD_NOT_ALLOW_ERROR_MESSAGE,
 } from "lib/api/server/constant";
-import { getSession } from "next-auth/react";
 import { HabitType, HabitDbRecordType } from "lib/types/habit.types";
 import { GeneralResponse } from "lib/types/common/data.types";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "pages/api/auth/[...nextauth]";
 
 async function handler(
   req: NextApiRequest,
@@ -34,7 +35,7 @@ async function handler(
     var response: GeneralResponse;
 
     // authentication
-    const session = await getSession({ req });
+    const session = await getServerSession(req, res, authOptions);
     if (!session) {
       response = { message: AUTHENTICATION_ERROR_MESSAGE };
       res.status(UNAUTHORIZED_STATUS_CODE).json(response);
@@ -43,7 +44,7 @@ async function handler(
 
     const data = req.body as HabitType;
 
-    const { taskTitle, notes, difficultyId } = data;
+    const { taskTitle, difficultyId } = data;
 
     const userId = session.user?.email || "";
 
@@ -54,25 +55,17 @@ async function handler(
       return;
     }
 
-    // add the db record
     var userRef = firebase.firestore().collection(USERS_COLLECTION).doc(userId);
 
     var userSnapshot = await userRef.get();
     if (userSnapshot.exists) {
-      var user = userSnapshot.data();
-      var habits: HabitDbRecordType[] | undefined = user?.habits;
-      const habitData = {
+      // add db record if user is valid
+      const habitData: HabitDbRecordType = {
         ...data,
         createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
+        userId,
       };
-      // if habit list is existing, append new habit record. else initiaze new list before appending the recored
-      if (habits) {
-        habits.push(habitData);
-      } else {
-        habits = new Array();
-        habits.push(habitData);
-      }
-      await userRef.set({ habits }, { merge: true });
+      firebase.firestore().collection(HABITS_COLLECTION).add(habitData);
       res
         .status(CREATED_SUCCESS_STATUS_CODE)
         .json({ message: CREATE_HABIT_SUCCSS_MESSAGE });

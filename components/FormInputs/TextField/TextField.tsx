@@ -73,7 +73,7 @@ const TextField = ({
         rules={createRules()}
         initialValue={defaultValue}
         dependencies={dependency ? [dependency] : []}
-        style={{ width: 300 }}
+        style={{ width: 313 }}
       >
         <Input
           prefix={prefix}

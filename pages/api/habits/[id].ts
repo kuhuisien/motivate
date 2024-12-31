@@ -14,10 +14,11 @@ import {
   DELETE,
 } from "lib/api/server/constant";
 import { GeneralResponse } from "lib/types/common/data.types";
-import { HabitType, HabitDbRecordType } from "lib/types/habit.types";
-import { getSession } from "next-auth/react";
+import { HabitType } from "lib/types/habit.types";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "pages/api/auth/[...nextauth]";
 import firebase from "firebase";
-import { USERS_COLLECTION } from "lib/firebase/constant";
+import { HABITS_COLLECTION } from "lib/firebase/constant";
 
 async function handler(
   req: NextApiRequest,
@@ -32,7 +33,7 @@ async function handler(
     var response: GeneralResponse;
 
     // authentication
-    const session = await getSession({ req });
+    const session = await getServerSession(req, res, authOptions);
     if (!session) {
       response = { message: AUTHENTICATION_ERROR_MESSAGE };
       res.status(UNAUTHORIZED_STATUS_CODE).json(response);
@@ -47,26 +48,15 @@ async function handler(
     }
     const decodedId = decodeURIComponent(id as string);
 
-    const userId = session.user?.email || "";
-
-    var userRef = firebase.firestore().collection(USERS_COLLECTION).doc(userId);
+    var habitRef = await firebase
+      .firestore()
+      .collection(HABITS_COLLECTION)
+      .doc(decodedId);
 
     // pre-handling for db record change
-    var userSnapshot = await userRef.get();
-    if (userSnapshot.exists) {
-      var user = userSnapshot.data();
-      var habits: HabitDbRecordType[] | undefined = user?.habits;
-      // return error if respective user does not have any habit record
-      if (!habits) {
-        response = { message: VALIDATION_ERROR_MESSAGE };
-        res.status(UNPROCESSABLE_ENTITY_STATUS_CODE).json(response);
-        return;
-      }
-
-      // find the record to be handled
-      var habitData = habits.find(
-        (h) => h.createdAt.toDate().toISOString() === decodedId
-      );
+    var habitSnapshot = await habitRef.get();
+    if (habitSnapshot.exists) {
+      var habitData = habitSnapshot.data();
 
       // return error if requested record to be handled is not found
       if (!habitData) {
@@ -78,9 +68,9 @@ async function handler(
       switch (method) {
         case PUT:
           const data = req.body as HabitType;
-          const { taskTitle, notes, difficultyId } = data;
+          const { taskTitle, notes, difficultyId, tags } = data;
 
-          //input validation
+          // input validation
           if (!taskTitle || !difficultyId) {
             response = { message: VALIDATION_ERROR_MESSAGE };
             res.status(UNPROCESSABLE_ENTITY_STATUS_CODE).json(response);
@@ -88,28 +78,19 @@ async function handler(
           }
 
           // perform record update
-          const updatedHabitData = {
+          await habitRef.set({
             ...habitData,
             taskTitle,
             notes: notes || null,
             difficultyId,
-          };
+            tags,
+          });
 
-          const updateIndex = habits.indexOf(habitData);
-          habits[updateIndex] = updatedHabitData;
-
-          await userRef.set({ habits }, { merge: true });
           res.status(OK_SUCCESS_STATUS_CODE).json({ message: SUCCESS_MESSAGE });
           return;
 
         case DELETE:
-          // perform record deletion
-          var deleteIndex = habits.indexOf(habitData);
-          if (deleteIndex !== -1) {
-            habits.splice(deleteIndex, 1);
-          }
-
-          await userRef.set({ habits }, { merge: true });
+          await habitRef.delete();
           res.status(OK_SUCCESS_STATUS_CODE).json({ message: SUCCESS_MESSAGE });
           return;
 

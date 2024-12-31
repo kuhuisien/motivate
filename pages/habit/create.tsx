@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -17,6 +17,8 @@ import HabitFormFieldContainer from "components/Habit/HabitFormField/HabitFormFi
 const Create = () => {
   const router = useRouter();
 
+  const [tags, setTags] = useState<string[]>([]); // to track the list of tags
+
   const { execute, status, error } = useAsync(addHabit, false);
 
   const [form] = Form.useForm();
@@ -30,6 +32,7 @@ const Create = () => {
       taskTitle,
       notes,
       difficultyId: difficulty,
+      tags,
     } as AddHabitRequestType);
   };
 
@@ -42,7 +45,7 @@ const Create = () => {
   return (
     <div className={classes.container}>
       <Form form={form} onFinish={onFinish}>
-        <HabitFormFieldContainer />
+        <HabitFormFieldContainer tags={tags} setTags={setTags} />
 
         <SubmitButton loading={status === "pending"}>CREATE</SubmitButton>
 

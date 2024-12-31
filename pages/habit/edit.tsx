@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { Form, Typography } from "antd";
@@ -25,6 +25,8 @@ const Edit = () => {
 
   const router = useRouter();
 
+  const [tags, setTags] = useState<string[]>(habitState.tags || []); // to track the list of tags
+
   const {
     execute: editExecute,
     status: editStatus,
@@ -49,8 +51,9 @@ const Edit = () => {
         taskTitle,
         notes,
         difficultyId: difficulty,
+        tags,
       },
-      { id: habitState.createdAt }
+      { id: habitState.id }
     );
   };
 
@@ -59,7 +62,7 @@ const Edit = () => {
       title: "Are you sure to delete?",
       icon: <ExclamationCircleOutlined />,
       async onOk() {
-        await deleteExecute(undefined, { id: habitState.createdAt });
+        await deleteExecute(undefined, { id: habitState.id });
       },
       onCancel() {},
     });
@@ -75,6 +78,8 @@ const Edit = () => {
       <Form form={form} onFinish={onFinish} onFinishFailed={onFinish}>
         <HabitFormFieldContainer
           habitState={habitState}
+          tags={tags}
+          setTags={setTags}
         ></HabitFormFieldContainer>
 
         <div className={classes.buttons}>

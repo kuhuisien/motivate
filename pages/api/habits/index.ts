@@ -1,7 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import firebase from "firebase/app";
 import "firebase/firestore";
-import { USERS_COLLECTION } from "lib/firebase/constant";
+import {
+  HABITS_COLLECTION,
+  HABIT_FIELD,
+  USERS_COLLECTION,
+} from "lib/firebase/constant";
 import {
   BAD_RERQUEST_STATUS_CODE,
   UNAUTHORIZED_STATUS_CODE,
@@ -13,12 +17,9 @@ import {
   SUCCESS_MESSAGE,
   METHOD_NOT_ALLOW_ERROR_MESSAGE,
 } from "lib/api/server/constant";
-import { getSession } from "next-auth/react";
-import {
-  HabitListingResponseType,
-  HabitDbRecordType,
-  HabitType,
-} from "lib/types/habit.types";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "pages/api/auth/[...nextauth]";
+import { HabitListingResponseType, HabitType } from "lib/types/habit.types";
 
 const GENERIC_HABIT_LISTING_ERROR_RESPONSE = { habitList: [] };
 
@@ -37,7 +38,8 @@ async function handler(
 
     var response: HabitListingResponseType;
 
-    const session = await getSession({ req });
+    // authentication
+    const session = await getServerSession(req, res, authOptions);
     if (!session) {
       response = {
         ...GENERIC_HABIT_LISTING_ERROR_RESPONSE,
@@ -51,9 +53,7 @@ async function handler(
 
     // retrieve db records
     var userRef = firebase.firestore().collection(USERS_COLLECTION).doc(userId);
-
     var userSnapshot = await userRef.get();
-
     if (!userSnapshot.exists) {
       await userRef.set({
         createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
@@ -61,24 +61,28 @@ async function handler(
       });
     }
 
-    var user = userSnapshot.data();
+    var habitRef = await firebase
+      .firestore()
+      .collection(HABITS_COLLECTION)
+      .where(HABIT_FIELD.USER_ID, "==", userId)
+      .orderBy(HABIT_FIELD.CREATED_AT)
+      .get();
 
-    var habits: HabitDbRecordType[] | undefined = user?.habits;
-
-    // sort the list using createdAt field
-    habits?.sort((a, b) =>
-      a.createdAt > b.createdAt ? 1 : b.createdAt > a.createdAt ? -1 : 0
-    );
-
-    // convert db type into object type to be returned by API
-    const habitsData: HabitType[] =
-      habits?.map((h) => {
-        return { ...h, createdAt: h.createdAt.toDate().toISOString() };
-      }) || [];
+    var habitList: HabitType[] = habitRef.docs.map((x) => {
+      const { taskTitle, notes, difficultyId, createdAt, tags } = x.data();
+      return {
+        taskTitle,
+        notes,
+        difficultyId,
+        tags,
+        createdAt: createdAt.toDate().toISOString(),
+        id: x.id,
+      };
+    });
 
     res
       .status(OK_SUCCESS_STATUS_CODE)
-      .json({ message: SUCCESS_MESSAGE, habitList: habitsData });
+      .json({ message: SUCCESS_MESSAGE, habitList });
     return;
   } catch (error) {
     console.error(error);

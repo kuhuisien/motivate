@@ -9,6 +9,7 @@ export const initialState: HabitState = {
     notes: null,
     difficultyId: null,
     createdAt: null,
+    id: "",
   },
 };
 

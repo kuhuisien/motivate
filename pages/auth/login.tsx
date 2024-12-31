@@ -41,7 +41,6 @@ const Login = () => {
         email: values[formFieldNames.email],
         password: values[formFieldNames.password],
       });
-      console.log(result);
       if (result?.error) {
         setSubmitErrorMessage(result.error);
       } else {

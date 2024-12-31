@@ -10,11 +10,14 @@ type Habit = {
 // Habit Item structure in db
 export type HabitDbRecordType = Habit & {
   createdAt: firebase.firestore.Timestamp;
+  userId: string;
 };
 
 // Habit Item structure returned by API
 export type HabitType = Habit & {
   createdAt: string | null;
+  id: string;
+  tags: string[];
 };
 
 // Habit Listing Response returned by API
