@@ -4,6 +4,7 @@ import { getRequestOptions } from "../../resource/configs/requests";
 import { parseResponse } from "../../resource/handlers/parseResponse/parseResponse";
 import { SystemSettingListingResponseType } from "lib/types/systemSetting.types";
 import { ApiQuery } from "lib/types/common/data.types";
+import { handleError } from "../../resource/handlers/handleError/handleError";
 
 const getSystemSettings = async (
   _dummyRequestBody: undefined,
@@ -16,12 +17,7 @@ const getSystemSettings = async (
     );
     return parseResponse(response, GET_SYSTEM_SETTINGS_URL);
   } catch (error) {
-    console.error(error);
-    if (axios.isAxiosError(error)) {
-      const errorMessage = error?.response?.data?.message || error.message;
-      throw new Error(errorMessage);
-    }
-    throw new Error("An error occured");
+    return handleError(error);
   }
 };
 

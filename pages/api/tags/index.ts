@@ -19,33 +19,33 @@ import {
 } from "lib/api/server/constant";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "pages/api/auth/[...nextauth]";
-import { HabitListingResponseType, HabitType } from "lib/types/habit.types";
+import { TagListingResponseType } from "lib/types/habit.types";
 
-const GENERIC_HABIT_LISTING_ERROR_RESPONSE = { habitList: [] };
+const GENERIC_TAG_LISTING_RESPONSE = { tagList: [] };
 
 async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<HabitListingResponseType>
+  res: NextApiResponse<TagListingResponseType>
 ) {
   try {
     if (req.method != GET) {
       res.status(BAD_RERQUEST_STATUS_CODE).json({
-        ...GENERIC_HABIT_LISTING_ERROR_RESPONSE,
+        ...GENERIC_TAG_LISTING_RESPONSE,
         message: METHOD_NOT_ALLOW_ERROR_MESSAGE,
       });
       return;
     }
 
-    var response: HabitListingResponseType;
+    var response: TagListingResponseType;
 
     // authentication
     const session = await getServerSession(req, res, authOptions);
     if (!session) {
       response = {
-        ...GENERIC_HABIT_LISTING_ERROR_RESPONSE,
+        ...GENERIC_TAG_LISTING_RESPONSE,
         message: AUTHENTICATION_ERROR_MESSAGE,
       };
-      res.status(UNAUTHORIZED_STATUS_CODE).json(response);
+      res.status(OK_SUCCESS_STATUS_CODE).json(response);
       return;
     }
 
@@ -54,49 +54,45 @@ async function handler(
     // retrieve db records
     var userRef = firebase.firestore().collection(USERS_COLLECTION).doc(userId);
     var userSnapshot = await userRef.get();
+
+    // for handling google signin flow, return empty list
     if (!userSnapshot.exists) {
-      await userRef.set({
-        createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
-        point: 0,
-      });
+      response = {
+        ...GENERIC_TAG_LISTING_RESPONSE,
+        message: SUCCESS_MESSAGE,
+      };
+      res.status(UNAUTHORIZED_STATUS_CODE).json(response);
+      return;
     }
 
-    var habitQuery = firebase
+    var habitRef = await firebase
       .firestore()
       .collection(HABITS_COLLECTION)
-      .where(HABIT_FIELD.USER_ID, "==", userId);
-
-    const tags = req.query["tags[]"];
-    const tagsArray =
-      Array.isArray(tags) && tags.length > 0 ? tags : tags ? [tags] : [];
-    if (tagsArray?.length > 0) {
-      habitQuery = habitQuery.where("tags", "array-contains-any", tagsArray);
-    }
-
-    const habitRef = await habitQuery
-      .orderBy(HABIT_FIELD.CREATED_AT, "desc")
+      .where(HABIT_FIELD.USER_ID, "==", userId)
       .get();
 
-    var habitList: HabitType[] = habitRef.docs.map((x) => {
-      const { taskTitle, notes, difficultyId, createdAt, tags } = x.data();
-      return {
-        taskTitle,
-        notes,
-        difficultyId,
-        tags,
-        createdAt: createdAt.toDate().toISOString(),
-        id: x.id,
-      };
+    const tagsSet = new Set<string>();
+
+    habitRef.docs.forEach((x) => {
+      const { tags } = x.data();
+      if (Array.isArray(tags)) {
+        tags.forEach((tag) => tagsSet.add(tag));
+      }
     });
+
+    const uniqueTags = Array.from(tagsSet);
+    const sortedTags = Array.from(uniqueTags).sort((a, b) =>
+      a.localeCompare(b)
+    );
 
     res
       .status(OK_SUCCESS_STATUS_CODE)
-      .json({ message: SUCCESS_MESSAGE, habitList });
+      .json({ message: SUCCESS_MESSAGE, tagList: sortedTags });
     return;
   } catch (error) {
     console.error(error);
     res.status(INTERNAL_SERVER_ERROR).json({
-      ...GENERIC_HABIT_LISTING_ERROR_RESPONSE,
+      ...GENERIC_TAG_LISTING_RESPONSE,
       message: INTERNAL_SERVER_ERROR_MESSAGE,
     });
     return;

@@ -24,3 +24,7 @@ export type HabitType = Habit & {
 export type HabitListingResponseType = GeneralResponse & {
   habitList: HabitType[];
 };
+
+export type TagListingResponseType = GeneralResponse & {
+  tagList: string[];
+};

@@ -3,6 +3,7 @@ import { EDIT_HABIT_URL } from "../../resource/configs/URL";
 import { getRequestOptions } from "../../resource/configs/requests";
 import { parseResponse } from "../../resource/handlers/parseResponse/parseResponse";
 import { GeneralResponse, ApiQuery } from "lib/types/common/data.types";
+import { handleError } from "../../resource/handlers/handleError/handleError";
 
 type EditHabitRequestType = {
   taskTitle: string | null;
@@ -22,12 +23,7 @@ const updateHabit = async (
     );
     return parseResponse(response, EDIT_HABIT_URL);
   } catch (error) {
-    console.error(error);
-    if (axios.isAxiosError(error)) {
-      const errorMessage = error?.response?.data?.message || error.message;
-      throw new Error(errorMessage);
-    }
-    throw new Error("An error occured");
+    return handleError(error);
   }
 };
 

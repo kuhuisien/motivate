@@ -25,3 +25,7 @@ a {
   flex: unset;
   width: 12rem;
 }
+
+.error {
+  text-align: center;
+}

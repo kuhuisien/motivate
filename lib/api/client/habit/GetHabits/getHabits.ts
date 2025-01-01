@@ -3,21 +3,23 @@ import { HabitListingResponseType } from "lib/types/habit.types";
 import { GET_HABITS_URL } from "../../resource/configs/URL";
 import { getRequestOptions } from "../../resource/configs/requests";
 import { parseResponse } from "../../resource/handlers/parseResponse/parseResponse";
+import { handleError } from "../../resource/handlers/handleError/handleError";
 
-const getHabits = async (): Promise<HabitListingResponseType> => {
+interface getHabitsInput {
+  tags?: string[];
+}
+
+const getHabits = async ({
+  tags,
+}: getHabitsInput): Promise<HabitListingResponseType> => {
   try {
-    const response = await axios.get<HabitListingResponseType>(
-      GET_HABITS_URL,
-      getRequestOptions()
-    );
+    const response = await axios.get<HabitListingResponseType>(GET_HABITS_URL, {
+      ...getRequestOptions(),
+      params: { tags },
+    });
     return parseResponse(response, GET_HABITS_URL);
   } catch (error) {
-    console.error(error);
-    if (axios.isAxiosError(error)) {
-      const errorMessage = error?.response?.data?.message || error.message;
-      throw new Error(errorMessage);
-    }
-    throw new Error("An error occured");
+    return handleError(error);
   }
 };
 

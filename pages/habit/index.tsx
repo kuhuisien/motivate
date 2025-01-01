@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { Space, Skeleton } from "antd";
+import { Skeleton, Select } from "antd";
 import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
 import { PATHS } from "lib/nav/routes";
 import classes from "styles/Habit.module.css";
@@ -13,6 +13,8 @@ import { getSystemSettings } from "lib/api/client/systemSetting/GetSystemSetting
 import { SystemSetting } from "lib/types/systemSetting.types";
 import { useGetSystemSettings } from "lib/hooks/useCounter";
 import { notification } from "antd";
+import { getTags } from "lib/api/client/tag/GetTags/getTags";
+import { useDebounce } from "use-debounce";
 
 interface HabitProps {
   difficultySystemSettings: SystemSetting[];
@@ -29,12 +31,33 @@ const MESSAGES = [
 const Habit = ({ difficultySystemSettings }: HabitProps) => {
   const router = useRouter();
 
+  const [searchingTags, setSearchingTags] = useState<string[]>([]);
+
+  const handleSelectTagListChange = (value: string[]) => {
+    setSearchingTags(value);
+  };
+
+  const [debouncedSearchingTag] = useDebounce(searchingTags, 1000);
+
+  const { value: getTagsValue } = useAsync(getTags);
+
+  const selectOptionList =
+    getTagsValue?.tagList.map((x) => {
+      return { label: x, value: x };
+    }) || [];
+
+  const isSelectTaggingVisible = selectOptionList.length > 0;
+
   const {
     execute: getHabitsExecute,
     status: getHabitsStatus,
     value: getHabitsValue,
     error: getHabitsError,
-  } = useAsync(getHabits);
+  } = useAsync(getHabits, true, { tags: searchingTags });
+
+  useEffect(() => {
+    getHabitsExecute({ tags: debouncedSearchingTag });
+  }, [debouncedSearchingTag]);
 
   const habitList = getHabitsValue?.habitList;
 
@@ -55,6 +78,25 @@ const Habit = ({ difficultySystemSettings }: HabitProps) => {
 
   return (
     <div className={classes.container}>
+      <div className={classes.searchOrCreateContainer}>
+        {isSelectTaggingVisible && (
+          <Select
+            mode="multiple"
+            allowClear
+            className={classes.select}
+            placeholder="Search by tags"
+            onChange={handleSelectTagListChange}
+            options={selectOptionList}
+          />
+        )}
+
+        <div className={classes.createButtonContainer}>
+          <SimpleButton onClick={() => router.push(PATHS.HABIT_CREATE.path)}>
+            CREATE
+          </SimpleButton>
+        </div>
+      </div>
+
       {getHabitsStatus === "pending" ? (
         <Skeleton
           active
@@ -62,23 +104,16 @@ const Habit = ({ difficultySystemSettings }: HabitProps) => {
           className={classes.habitSkeleton}
         />
       ) : getHabitsStatus === "error" ? (
-        <div onClick={() => getHabitsExecute()}>{getHabitsError}</div>
+        <div
+          className="error"
+          onClick={() => getHabitsExecute({ tags: searchingTags })}
+        >
+          {getHabitsError}
+        </div>
       ) : (
         getHabitsStatus === "success" && (
           <>
-            <Space
-              direction="vertical"
-              align="center"
-              className={classes.habit}
-            >
-              <div className={classes.createButtonContainer}>
-                <SimpleButton
-                  onClick={() => router.push(PATHS.HABIT_CREATE.path)}
-                >
-                  CREATE
-                </SimpleButton>
-              </div>
-
+            <div className={classes.habitListContainer}>
               {habitList?.map((h) => (
                 <HabitCardContainer
                   key={h.taskTitle}
@@ -86,7 +121,7 @@ const Habit = ({ difficultySystemSettings }: HabitProps) => {
                   handleClick={handleHabitCardButtonClick}
                 ></HabitCardContainer>
               ))}
-            </Space>
+            </div>
           </>
         )
       )}

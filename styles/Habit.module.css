@@ -2,10 +2,19 @@
   min-height: 100vh;
   padding: 0 0.5rem;
   margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.habit {
+.select {
   width: 100%;
+}
+
+.habitListContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .habitSkeleton {
@@ -13,10 +22,13 @@
   width: 20rem;
 }
 
-.habit .ant-space-item {
-  width: 100% !important;
+.searchOrCreateContainer {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  width: 313px;
 }
 
 .createButtonContainer {
-  margin-bottom: 1rem;
+  padding-left: 1rem;
 }

@@ -18,6 +18,7 @@ export const GET_HABITS_URL = `${API_BASE_URL}/habits`;
 export const EDIT_HABIT_URL = `${API_BASE_URL}/habits`;
 export const DELETE_HABIT_URL = `${API_BASE_URL}/habits`;
 
+export const GET_TAGS_UEL = `${API_BASE_URL}/tags`;
 // ==========================
 // SystemSetting
 // ==========================

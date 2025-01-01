@@ -15,3 +15,5 @@ export const formatPayloadUndefinedErrorMessage = (URL: string) => {
 export const formatPayloadNullErrorMessage = (URL: string) => {
   return `Response payload from "${URL}" was found to be null`;
 };
+
+export const GENERIC_ERROR_MESSAGE = "An error occured";

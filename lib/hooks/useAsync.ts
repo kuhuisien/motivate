@@ -2,8 +2,9 @@ import { useState, useCallback, useEffect } from "react";
 import { ApiQuery } from "lib/types/common/data.types";
 
 export const useAsync = <T, E = string>(
-  asyncFunction: (requestBody?: any, queryObj?: any) => Promise<T>,
-  immediate = true
+  asyncFunction: (requestParam?: any, queryObj?: any) => Promise<T>,
+  immediate = true,
+  firstlyQueryObj?: any
 ) => {
   const [status, setStatus] = useState<
     "idle" | "pending" | "success" | "error"
@@ -36,7 +37,7 @@ export const useAsync = <T, E = string>(
   // in an onClick handler.
   useEffect(() => {
     if (immediate) {
-      execute();
+      execute(firstlyQueryObj);
     }
   }, [execute, immediate]);
   return { execute, status, value, error };
