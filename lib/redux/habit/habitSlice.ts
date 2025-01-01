@@ -10,6 +10,7 @@ export const initialState: HabitState = {
     difficultyId: null,
     createdAt: null,
     id: "",
+    tags: [],
   },
 };
 
