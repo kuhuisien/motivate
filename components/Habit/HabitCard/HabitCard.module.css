@@ -1,7 +1,8 @@
 .cardContainer {
   position: relative;
-  width: 20rem;
+  width: 100%;
   margin-bottom: 0.5rem;
+  flex: 1 1;
 }
 
 .hitButton {

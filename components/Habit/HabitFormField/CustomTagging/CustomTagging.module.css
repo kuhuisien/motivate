@@ -6,7 +6,7 @@
 .taggingListContainer {
   margin: 1rem 0;
   display: flex;
-  width: 313px;
+
   flex-wrap: wrap;
 }
 

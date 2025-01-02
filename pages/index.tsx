@@ -1,38 +1,42 @@
-import Head from "next/head";
-import styles from "styles/Home.module.css";
+import classes from "styles/Home.module.css";
 import React, { useEffect } from "react";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { PATHS } from "lib/nav/routes";
 import { useRouter } from "next/router";
-import BoxContainer from "components/Three/BoxContainer/BoxContainer";
+import { getSystemSettings } from "lib/api/client/systemSetting/GetSystemSetting/GetSystemSetting";
+import Cube from "components/Cube/Cube";
+import { SystemSetting } from "lib/types/systemSetting.types";
+import { useGetSystemSettings } from "lib/hooks/useCounter";
 
-const Home = () => {
+interface HomeProps {
+  difficultySystemSettings: SystemSetting[];
+}
+
+const Home = ({ difficultySystemSettings }: HomeProps) => {
   const router = useRouter();
+
+  // save system settings to redux state
+  useGetSystemSettings(difficultySystemSettings);
 
   useEffect(() => {
     // redirect after 3 seconds
     const timer = setTimeout(() => {
       clearTimeout(timer);
-      router.push(PATHS.HABIT.path);
+      router.replace(PATHS.HABIT.path);
     }, 3000);
   }, []);
 
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Aspiro</title>
-        <meta name="description" content="Set goals and stay motivated." />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <BoxContainer />
+    <div className={classes.container}>
+      <Cube />
     </div>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession({ req: context.req });
+
   if (!session) {
     return {
       redirect: {
@@ -42,8 +46,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  try {
+    var difficultySystemSettingsResponse = await getSystemSettings(undefined, {
+      category: "DIFFICULTY",
+    });
+  } catch (error) {
+    console.error(error);
+    return {
+      notFound: true,
+    };
+  }
+
   return {
-    props: {},
+    props: {
+      difficultySystemSettings: difficultySystemSettingsResponse.systemSettings,
+    },
   };
 };
 

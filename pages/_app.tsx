@@ -7,6 +7,7 @@ import { SessionProvider as NexthAuthProvider } from "next-auth/react";
 import withRedux from "next-redux-wrapper";
 import { makeStore } from "lib/redux/root/store";
 import { Provider } from "react-redux";
+import Head from "next/head";
 
 initializeFirebase();
 
@@ -17,6 +18,12 @@ type Props = AppProps & { store: any };
 function MyApp({ Component, pageProps, store }: Props) {
   return (
     <Provider store={store}>
+      <Head>
+        <title>Aspiro</title>
+        <meta name="description" content="Set goals and stay motivated." />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
       <NexthAuthProvider session={pageProps?.session}>
         <Layout>
           <Header className="header">
