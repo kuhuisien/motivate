@@ -5,22 +5,25 @@ import { Form, Typography } from "antd";
 import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
 import { PATHS } from "lib/nav/routes";
 import classes from "styles/HabitEdit.module.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { habitSelector } from "lib/redux/habit/habitSlice";
 import { formFieldNames } from "components/Habit/HabitFormField/HabitFormField";
 import { Modal } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { updateHabit } from "lib/api/client/habit/UpdateHabit/updateHabit";
 import { useRouter } from "next/router";
-import { useAsync } from "lib/hooks/useAsync";
 import { HabitType } from "lib/types/habit.types";
 import SubmitButton from "components/Buttons/SubmitButton/SubmitButton";
 import { deleteHabit } from "lib/api/client/habit/DeleteHabit/deleteHabit";
 import HabitFormFieldContainer from "components/Habit/HabitFormField/HabitFormFieldContainer";
+import { useMutateRequest } from "lib/hooks/useMutationRequest";
+import { fetchHabitList } from "lib/redux/habit/habitThunk";
 
 const { confirm } = Modal;
 
 const Edit = () => {
+  const dispatch = useDispatch();
+
   const habitState: HabitType = useSelector(habitSelector);
 
   const router = useRouter();
@@ -31,13 +34,13 @@ const Edit = () => {
     execute: editExecute,
     status: editStatus,
     error: editError,
-  } = useAsync(updateHabit, false);
+  } = useMutateRequest(updateHabit);
 
   const {
     execute: deleteExecute,
     status: deleteStatus,
     error: deleteError,
-  } = useAsync(deleteHabit, false);
+  } = useMutateRequest(deleteHabit);
 
   const [form] = Form.useForm();
 
@@ -69,6 +72,7 @@ const Edit = () => {
   }
   useEffect(() => {
     if (editStatus === "success" || deleteStatus === "success") {
+      dispatch(fetchHabitList());
       router.replace(PATHS.HABIT.path);
     }
   }, [editStatus, deleteStatus]);

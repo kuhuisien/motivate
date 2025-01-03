@@ -19,6 +19,12 @@ a {
 .header {
   background-color: white;
   z-index: 100;
+  position: fixed;
+  width: 100%;
+}
+
+.content {
+  margin-top: 60.4px;
 }
 
 .ant-card-head-title {

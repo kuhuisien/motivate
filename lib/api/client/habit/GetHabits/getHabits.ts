@@ -5,14 +5,15 @@ import { getRequestOptions } from "../../resource/configs/requests";
 import { parseResponse } from "../../resource/handlers/parseResponse/parseResponse";
 import { handleError } from "../../resource/handlers/handleError/handleError";
 
-interface getHabitsInput {
+export interface getHabitsInput {
   tags?: string[];
 }
 
-const getHabits = async ({
-  tags,
-}: getHabitsInput): Promise<HabitListingResponseType> => {
+const getHabits = async (
+  inputs?: getHabitsInput
+): Promise<HabitListingResponseType> => {
   try {
+    const { tags } = inputs || {};
     const response = await axios.get<HabitListingResponseType>(GET_HABITS_URL, {
       ...getRequestOptions(),
       params: { tags },

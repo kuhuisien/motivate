@@ -9,6 +9,7 @@ type EditHabitRequestType = {
   taskTitle: string | null;
   notes: string | null;
   difficultyId: string | null;
+  tags?: string[];
 };
 
 const updateHabit = async (

@@ -12,6 +12,11 @@ export const initialState: HabitState = {
     id: "",
     tags: [],
   },
+  fetchHabitList: {
+    isLoading: null,
+    error: null,
+    habitList: [],
+  },
 };
 
 /**
@@ -25,16 +30,42 @@ const habitSlice = createSlice({
     setSelectedHabit(state, action: PayloadAction<HabitType>) {
       state.selectedHabit = action.payload;
     },
+    fetchHabitListStart(state) {
+      state.fetchHabitList.isLoading = true;
+      state.fetchHabitList.error = null;
+      state.fetchHabitList.habitList = initialState.fetchHabitList.habitList;
+    },
+    fetchHabitListErrored(state, action: PayloadAction<string>) {
+      state.fetchHabitList.isLoading = false;
+      state.fetchHabitList.error = action.payload;
+    },
+    fetchHabitListSucceeded(state, action: PayloadAction<HabitType[]>) {
+      state.fetchHabitList.isLoading = false;
+      state.fetchHabitList.habitList = action.payload;
+    },
   },
 });
 
-export const { setSelectedHabit } = habitSlice.actions;
+export const {
+  setSelectedHabit,
+  fetchHabitListStart,
+  fetchHabitListErrored,
+  fetchHabitListSucceeded,
+} = habitSlice.actions;
 
 /**
- * Selector
- * @param state HabitType
+ * Selectors
  */
 export const habitSelector = (state: RootState): HabitType =>
   state.habit.selectedHabit;
+
+export const habitListIsLoadingSelector = (state: RootState): boolean | null =>
+  state.habit.fetchHabitList.isLoading;
+
+export const habitListErrorSelector = (state: RootState): string | null =>
+  state.habit.fetchHabitList.error;
+
+export const habitListSelector = (state: RootState): HabitType[] =>
+  state.habit.fetchHabitList.habitList || [];
 
 export default habitSlice.reducer;

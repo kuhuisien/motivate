@@ -1,10 +1,9 @@
 import { useState, useCallback, useEffect } from "react";
-import { ApiQuery } from "lib/types/common/data.types";
 
-export const useAsync = <T, E = string>(
-  asyncFunction: (requestParam?: any, queryObj?: any) => Promise<T>,
+export const useGetRequest = <T, E = string, P = undefined>(
+  asyncFunction: (requestParam: P) => Promise<T>,
   immediate = true,
-  firstlyQueryObj?: any
+  firstlyRequestParam: P
 ) => {
   const [status, setStatus] = useState<
     "idle" | "pending" | "success" | "error"
@@ -16,16 +15,17 @@ export const useAsync = <T, E = string>(
   // useCallback ensures the below useEffect is not called
   // on every render, but only if asyncFunction changes.
   const execute = useCallback(
-    (requestParam?: any, queryObj?: ApiQuery) => {
+    (requestParam: P) => {
       setStatus("pending");
       setValue(null);
       setError(null);
-      return asyncFunction(requestParam, queryObj)
-        .then((response: any) => {
+      return asyncFunction(requestParam)
+        .then((response: T) => {
           setValue(response);
           setStatus("success");
         })
         .catch((error: any) => {
+          console.log(error);
           setError(error.message);
           setStatus("error");
         });
@@ -37,7 +37,7 @@ export const useAsync = <T, E = string>(
   // in an onClick handler.
   useEffect(() => {
     if (immediate) {
-      execute(firstlyQueryObj);
+      execute(firstlyRequestParam);
     }
   }, [execute, immediate]);
   return { execute, status, value, error };

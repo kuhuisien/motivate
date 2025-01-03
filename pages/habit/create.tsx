@@ -11,15 +11,19 @@ import {
   AddHabitRequestType,
 } from "lib/api/client/habit/AddHabit/addHabit";
 import SubmitButton from "components/Buttons/SubmitButton/SubmitButton";
-import { useAsync } from "lib/hooks/useAsync";
 import HabitFormFieldContainer from "components/Habit/HabitFormField/HabitFormFieldContainer";
+import { useDispatch } from "react-redux";
+import { useMutateRequest } from "lib/hooks/useMutationRequest";
+import { fetchHabitList } from "lib/redux/habit/habitThunk";
 
 const Create = () => {
   const router = useRouter();
 
+  const dispatch = useDispatch();
+
   const [tags, setTags] = useState<string[]>([]); // to track the list of tags
 
-  const { execute, status, error } = useAsync(addHabit, false);
+  const { execute, status, error } = useMutateRequest(addHabit);
 
   const [form] = Form.useForm();
 
@@ -28,16 +32,20 @@ const Create = () => {
     const notes = values[formFieldNames.notes];
     const difficulty = values[formFieldNames.difficulty];
 
-    await execute({
-      taskTitle,
-      notes,
-      difficultyId: difficulty,
-      tags,
-    } as AddHabitRequestType);
+    await execute(
+      {
+        taskTitle,
+        notes,
+        difficultyId: difficulty,
+        tags,
+      },
+      undefined
+    );
   };
 
   useEffect(() => {
     if (status === "success") {
+      dispatch(fetchHabitList());
       router.replace(PATHS.HABIT.path);
     }
   }, [status]);

@@ -1,11 +1,7 @@
-import {
-  configureStore,
-  EnhancedStore,
-  getDefaultMiddleware,
-} from "@reduxjs/toolkit";
-import { MakeStore } from "next-redux-wrapper";
+import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { RootState } from "./redux.types";
-import rootReducer from "./rootReducer";
+import rootReducer, { persistConfig } from "./rootReducer";
+import { persistStore, persistReducer } from "redux-persist";
 
 /**
  * @see https://redux-toolkit.js.org/usage/usage-with-typescript#correct-typings-for-the-dispatch-type
@@ -18,4 +14,21 @@ const store = configureStore({
   devTools: process.env.NODE_ENV === "development",
 });
 
-export const makeStore: MakeStore = (_?: RootState): EnhancedStore => store;
+const makeConfiguredStore = () =>
+  configureStore({
+    reducer: rootReducer,
+  });
+
+export const makeStore = () => {
+  const isServer = typeof window === "undefined";
+  if (isServer) {
+    return makeConfiguredStore();
+  } else {
+    const persistedReducer = persistReducer(persistConfig, rootReducer);
+    let store: any = configureStore({
+      reducer: persistedReducer,
+    });
+    store.__persistor = persistStore(store);
+    return store;
+  }
+};

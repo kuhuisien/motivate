@@ -9,6 +9,7 @@ export type AddHabitRequestType = {
   taskTitle: string | null;
   notes: string | null;
   difficultyId: string | null;
+  tags: string[];
 };
 
 const addHabit = async (
