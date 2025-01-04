@@ -6,10 +6,7 @@ import { Form, Typography } from "antd";
 import { PATHS } from "lib/nav/routes";
 import classes from "styles/HabitCreate.module.css";
 import { formFieldNames } from "components/Habit/HabitFormField/HabitFormField";
-import {
-  addHabit,
-  AddHabitRequestType,
-} from "lib/api/client/habit/AddHabit/addHabit";
+import { addHabit } from "lib/api/client/habit/AddHabit/addHabit";
 import SubmitButton from "components/Buttons/SubmitButton/SubmitButton";
 import HabitFormFieldContainer from "components/Habit/HabitFormField/HabitFormFieldContainer";
 import { useDispatch } from "react-redux";

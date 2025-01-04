@@ -1,7 +1,7 @@
 import { Store, CombinedState, AnyAction as ReduxAnyAction } from "redux";
-import { ThunkAction, AnyAction, configureStore } from "@reduxjs/toolkit";
+import { ThunkAction, AnyAction } from "@reduxjs/toolkit";
 import rootReducer from "./rootReducer";
-import { makeStore } from "./store";
+import { clientSideConfiguredStore, makeStore } from "./store";
 
 // ==============================
 // This file contains commonly used types for Redux things
@@ -25,15 +25,6 @@ export type RootState = ReturnType<typeof rootReducer>;
  */
 export type RootStore = Store<CombinedState<RootState>, ReduxAnyAction>;
 
-/**
- * Store configured, only for the use of:
- *   * App-wide Redux Typings configuration
- */
-/* istanbul ignore next */
-const store = configureStore({
-  reducer: rootReducer,
-});
-
 export type AppStore = ReturnType<typeof makeStore>;
 /**
  * The derived dispatch function type from the store.
@@ -42,7 +33,8 @@ export type AppStore = ReturnType<typeof makeStore>;
  * you do not need to manually update the type definition when using
  * in container components.
  */
-export type RootDispatch = typeof store.dispatch;
+
+export type RootDispatch = typeof clientSideConfiguredStore.dispatch;
 
 /**
  * A standardized AppThunk type definition. This declares that the

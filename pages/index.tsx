@@ -27,10 +27,9 @@ const Home = ({ difficultySystemSettings }: HomeProps) => {
   useGetSystemSettings(difficultySystemSettings);
 
   useEffect(() => {
-    dispatch(fetchHabitList());
-  }, []);
-
-  useEffect(() => {
+    if (isLoading === null) {
+      dispatch(fetchHabitList());
+    }
     if (isLoading === false) {
       router.replace(PATHS.HABIT.path);
     }

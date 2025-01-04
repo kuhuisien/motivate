@@ -25,7 +25,6 @@ export const useGetRequest = <T, E = string, P = undefined>(
           setStatus("success");
         })
         .catch((error: any) => {
-          console.log(error);
           setError(error.message);
           setStatus("error");
         });

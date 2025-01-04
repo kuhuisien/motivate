@@ -23,6 +23,9 @@ import { HabitListingResponseType, HabitType } from "lib/types/habit.types";
 
 const GENERIC_HABIT_LISTING_ERROR_RESPONSE = { habitList: [] };
 
+const DEFAULT_PAGE_NUMBER = 1;
+const DEFAULT_PAGE_SIZE = 5;
+
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<HabitListingResponseType>
@@ -73,11 +76,29 @@ async function handler(
       habitQuery = habitQuery.where("tags", "array-contains-any", tagsArray);
     }
 
-    const habitRef = await habitQuery
-      .orderBy(HABIT_FIELD.CREATED_AT, "desc")
-      .get();
+    habitQuery = habitQuery.orderBy(HABIT_FIELD.CREATED_AT, "desc");
 
-    var habitList: HabitType[] = habitRef.docs.map((x) => {
+    const totalSize = await (await habitQuery.get()).size;
+
+    const pageNumber =
+      parseInt(req.query["pageNumber"] as string) || DEFAULT_PAGE_NUMBER;
+    const pageSize =
+      parseInt(req.query["pageSize"] as string) || DEFAULT_PAGE_SIZE;
+
+    if (pageNumber > 1) {
+      const offset = (pageNumber - 1) * pageSize;
+      const skipSnapshot = await habitQuery.limit(offset).get();
+      if (!skipSnapshot.empty) {
+        const lastDoc = skipSnapshot.docs[skipSnapshot.docs.length - 1];
+        habitQuery = habitQuery.startAfter(lastDoc);
+      }
+    }
+
+    const hasMore = totalSize > pageNumber * pageSize;
+
+    const habitRef = await habitQuery.limit(pageSize).get();
+
+    const habitList: HabitType[] = habitRef.docs.map((x) => {
       const { taskTitle, notes, difficultyId, createdAt, tags } = x.data();
       return {
         taskTitle,
@@ -89,9 +110,11 @@ async function handler(
       };
     });
 
+    const pagination = { pageSize, pageNumber, hasMore, totalSize };
+
     res
       .status(OK_SUCCESS_STATUS_CODE)
-      .json({ message: SUCCESS_MESSAGE, habitList });
+      .json({ message: SUCCESS_MESSAGE, habitList, pagination });
     return;
   } catch (error) {
     console.error(error);

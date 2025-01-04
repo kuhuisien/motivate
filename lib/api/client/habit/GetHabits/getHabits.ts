@@ -7,16 +7,18 @@ import { handleError } from "../../resource/handlers/handleError/handleError";
 
 export interface getHabitsInput {
   tags?: string[];
+  pageNumber?: number;
+  pageSize?: number;
 }
 
 const getHabits = async (
   inputs?: getHabitsInput
 ): Promise<HabitListingResponseType> => {
   try {
-    const { tags } = inputs || {};
+    const { tags, pageNumber = 1, pageSize = 5 } = inputs || {};
     const response = await axios.get<HabitListingResponseType>(GET_HABITS_URL, {
       ...getRequestOptions(),
-      params: { tags },
+      params: { tags, pageNumber, pageSize },
     });
     return parseResponse(response, GET_HABITS_URL);
   } catch (error) {

@@ -5,7 +5,4 @@ export interface HabitCardProps {
   habit: HabitType;
 
   difficultySettings: SystemSetting[];
-
-  // event fired when habit card right top button is clicked
-  handleClick: () => void;
 }

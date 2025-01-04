@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { Skeleton, Select } from "antd";
 import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
@@ -6,7 +6,6 @@ import { PATHS } from "lib/nav/routes";
 import classes from "styles/Habit.module.css";
 import HabitCardContainer from "components/Habit/HabitCard/HabitCardContainer";
 import { useGetRequest } from "lib/hooks/useGetRequest";
-import { notification } from "antd";
 import { getTags } from "lib/api/client/tag/GetTags/getTags";
 import { useDebounce } from "use-debounce";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,18 +13,17 @@ import {
   habitListIsLoadingSelector,
   habitListErrorSelector,
   habitListSelector,
+  habitListHasMoreSelector,
 } from "lib/redux/habit/habitSlice";
-import { fetchHabitList } from "lib/redux/habit/habitThunk";
+import { fetchHabitList, fetchMoreHabitList } from "lib/redux/habit/habitThunk";
 
-const MESSAGES = [
-  "You did it! 🎉",
-  "You’re unstoppable! 🚀",
-  "Goal Unlocked! 🔓",
-  "You’re on fire! 🔥",
-  "High five! 🖐️",
-];
+const INTERCEPTION_OBSERVER_OPTION = {
+  threshold: 0.8,
+};
 
 const Habit = () => {
+  const habitListEndRef = useRef<HTMLDivElement | null>(null);
+
   const router = useRouter();
 
   const dispatch = useDispatch();
@@ -33,6 +31,7 @@ const Habit = () => {
   const habitList = useSelector(habitListSelector);
   const isLoadingHabitList = useSelector(habitListIsLoadingSelector);
   const errorHabitList = useSelector(habitListErrorSelector);
+  const hasMore = useSelector(habitListHasMoreSelector);
 
   const [searchingTags, setSearchingTags] = useState<string[]>([]);
   const [seachViaTagHelper, setSearchViaTagHelper] = useState(false);
@@ -63,15 +62,29 @@ const Habit = () => {
     }
   }, [debouncedSearchingTag]);
 
-  // callback invoked when habit card button is clicked
-  const handleHabitCardButtonClick = () => {
-    const randomIndex = Math.floor(Math.random() * MESSAGES.length);
-    const notificationMsg = MESSAGES[randomIndex];
+  // fetch and append habit list when user scrolls down
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      observerCallback,
+      INTERCEPTION_OBSERVER_OPTION
+    );
+    if (habitListEndRef.current) {
+      observer.observe(habitListEndRef.current);
+    }
 
-    notification.open({
-      message: notificationMsg,
-      placement: "bottomRight",
-      duration: 2,
+    return () => {
+      if (habitListEndRef.current) {
+        observer.unobserve(habitListEndRef.current);
+      }
+    };
+  }, [habitListEndRef.current, INTERCEPTION_OBSERVER_OPTION]);
+
+  const observerCallback: IntersectionObserverCallback = (entries) => {
+    entries.forEach((x) => {
+      console.log(x);
+      if (x.isIntersecting) {
+        dispatch(fetchMoreHabitList({ tags: debouncedSearchingTag }));
+      }
     });
   };
 
@@ -119,9 +132,14 @@ const Habit = () => {
             <HabitCardContainer
               key={h.taskTitle}
               habit={h}
-              handleClick={handleHabitCardButtonClick}
             ></HabitCardContainer>
           ))}
+        </div>
+      )}
+
+      {hasMore && (
+        <div ref={habitListEndRef} className={classes.loadMore}>
+          Load more...
         </div>
       )}
     </div>

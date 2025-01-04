@@ -20,9 +20,17 @@ export type HabitType = Habit & {
   tags: string[];
 };
 
+export type PaginationType = {
+  pageNumber: number;
+  pageSize: number;
+  totalSize: number;
+  hasMore: boolean;
+};
+
 // Habit Listing Response returned by API
 export type HabitListingResponseType = GeneralResponse & {
   habitList: HabitType[];
+  pagination?: PaginationType | null;
 };
 
 export type TagListingResponseType = GeneralResponse & {

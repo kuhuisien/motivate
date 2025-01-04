@@ -31,3 +31,8 @@
 .createButtonContainer {
   margin-bottom: 1.5rem;
 }
+
+.loadMore {
+  text-align: center;
+  margin: 0.5rem;
+}

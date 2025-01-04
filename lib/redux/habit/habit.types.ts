@@ -5,5 +5,12 @@ export interface HabitState {
     isLoading: boolean | null;
     error: string | null;
     habitList: HabitType[];
+
+    pagination: {
+      pageNumber: number;
+      totalSize: number;
+    };
   };
+  // whether habit list is being fetched to be appended
+  isAppending: boolean;
 }

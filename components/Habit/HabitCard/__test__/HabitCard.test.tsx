@@ -8,13 +8,9 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 describe("HabitCard", () => {
-  let onClickButtonListener: jest.Mock<any, any>;
-
   let defaultProps: HabitCardProps;
 
   function renderHabitCard(args: any) {
-    onClickButtonListener = jest.fn();
-
     const MOCK_HABIT: HabitType = {
       id: "dummy id",
       taskTitle: "dummy title",
@@ -26,7 +22,6 @@ describe("HabitCard", () => {
     defaultProps = {
       habit: MOCK_HABIT,
       difficultySettings: MOCK_DIFFICULTY_SETTINGS,
-      handleClick: onClickButtonListener,
     };
     const props = { ...defaultProps, ...args };
     return render(<HabitCard {...props} />);
@@ -57,8 +52,7 @@ describe("HabitCard", () => {
   // ====================
   // BUTTON
   // ====================
-  it("should invoke onClick handler for Button correctly", async () => {
+  it("should invoke onClick handler for Button without error", async () => {
     await userEvent.click(screen.getByRole("button"));
-    expect(onClickButtonListener).toHaveBeenCalled();
   });
 });

@@ -1,6 +1,5 @@
-import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
-import { RootState } from "./redux.types";
-import rootReducer, { persistConfig } from "./rootReducer";
+import { configureStore } from "@reduxjs/toolkit";
+import rootReducer, { rootPersistConfig } from "./rootReducer";
 import {
   persistStore,
   persistReducer,
@@ -17,22 +16,26 @@ const makeConfiguredStore = () =>
     reducer: rootReducer,
   });
 
+export const clientSideConfigureStore = () => {
+  const persistedReducer = persistReducer(rootPersistConfig, rootReducer);
+  return configureStore({
+    reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: {
+          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        },
+      }),
+  });
+};
+
+export const clientSideConfiguredStore = clientSideConfigureStore();
+
 export const makeStore = () => {
   const isServer = typeof window === "undefined";
   if (isServer) {
     return makeConfiguredStore();
   } else {
-    const persistedReducer = persistReducer(persistConfig, rootReducer);
-    let store: any = configureStore({
-      reducer: persistedReducer,
-      middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware({
-          serializableCheck: {
-            ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-          },
-        }),
-    });
-    store.__persistor = persistStore(store);
-    return store;
+    return clientSideConfigureStore();
   }
 };

@@ -29,7 +29,6 @@ export const useMutateRequest = <
           setStatus("success");
         })
         .catch((error: any) => {
-          console.log(error);
           setError(error.message);
           setStatus("error");
         });
