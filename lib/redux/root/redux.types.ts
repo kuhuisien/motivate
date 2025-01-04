@@ -1,6 +1,7 @@
 import { Store, CombinedState, AnyAction as ReduxAnyAction } from "redux";
 import { ThunkAction, AnyAction, configureStore } from "@reduxjs/toolkit";
 import rootReducer from "./rootReducer";
+import { makeStore } from "./store";
 
 // ==============================
 // This file contains commonly used types for Redux things
@@ -33,13 +34,7 @@ const store = configureStore({
   reducer: rootReducer,
 });
 
-export function setupStore(preloadedState?: Partial<RootState>) {
-  return configureStore({
-    reducer: rootReducer,
-    preloadedState,
-  });
-}
-export type AppStore = ReturnType<typeof setupStore>;
+export type AppStore = ReturnType<typeof makeStore>;
 /**
  * The derived dispatch function type from the store.
  *

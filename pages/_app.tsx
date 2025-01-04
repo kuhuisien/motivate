@@ -18,7 +18,7 @@ const { Header, Content } = Layout;
 
 type Props = AppProps & { store: any };
 
-function MyApp({ Component, pageProps, store }: Props) {
+function MyApp({ Component, pageProps }: Props) {
   const storeRef = useRef<AppStore>();
   const persisterRef = useRef();
   if (!storeRef.current) {
