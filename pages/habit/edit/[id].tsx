@@ -3,7 +3,7 @@ import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { Form, Typography } from "antd";
 import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
-import { PATHS } from "lib/nav/routes";
+import { ID_PARAM, PATHS } from "lib/nav/routes";
 import classes from "styles/HabitEdit.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { habitSelector } from "lib/redux/habit/habitSlice";
@@ -12,23 +12,27 @@ import { Modal } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { updateHabit } from "lib/api/client/habit/UpdateHabit/updateHabit";
 import { useRouter } from "next/router";
-import { HabitType } from "lib/types/habit.types";
 import SubmitButton from "components/Buttons/SubmitButton/SubmitButton";
 import { deleteHabit } from "lib/api/client/habit/DeleteHabit/deleteHabit";
 import HabitFormFieldContainer from "components/Habit/HabitFormField/HabitFormFieldContainer";
 import { useMutateRequest } from "lib/hooks/useMutationRequest";
 import { fetchHabitList } from "lib/redux/habit/habitThunk";
+import { useParams } from "next/navigation";
 
 const { confirm } = Modal;
 
 const Edit = () => {
   const dispatch = useDispatch();
 
-  const habitState: HabitType = useSelector(habitSelector);
+  const params = useParams<{ id: string }>();
+
+  const habitId = params[ID_PARAM];
+
+  const habitState = useSelector(habitSelector(habitId));
 
   const router = useRouter();
 
-  const [tags, setTags] = useState<string[]>(habitState.tags || []); // to track the list of tags
+  const [tags, setTags] = useState<string[]>(habitState?.tags || []);
 
   const {
     execute: editExecute,
@@ -56,7 +60,7 @@ const Edit = () => {
         difficultyId: difficulty,
         tags,
       },
-      { id: habitState.id }
+      { id: habitState?.id }
     );
   };
 
@@ -65,7 +69,7 @@ const Edit = () => {
       title: "Are you sure to delete?",
       icon: <ExclamationCircleOutlined />,
       async onOk() {
-        await deleteExecute(undefined, { id: habitState.id });
+        await deleteExecute(undefined, { id: habitState?.id });
       },
       onCancel() {},
     });

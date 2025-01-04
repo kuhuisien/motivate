@@ -6,7 +6,6 @@ import { PATHS } from "lib/nav/routes";
 import classes from "styles/Habit.module.css";
 import HabitCardContainer from "components/Habit/HabitCard/HabitCardContainer";
 import { useGetRequest } from "lib/hooks/useGetRequest";
-import { getHabits } from "lib/api/client/habit/GetHabits/getHabits";
 import { notification } from "antd";
 import { getTags } from "lib/api/client/tag/GetTags/getTags";
 import { useDebounce } from "use-debounce";
@@ -31,7 +30,6 @@ const Habit = () => {
 
   const dispatch = useDispatch();
 
-  //const shouldFetchHabitListOnLoad = useSelector(fetchHabitListOnLoadSelector);
   const habitList = useSelector(habitListSelector);
   const isLoadingHabitList = useSelector(habitListIsLoadingSelector);
   const errorHabitList = useSelector(habitListErrorSelector);
@@ -55,10 +53,13 @@ const Habit = () => {
 
   const isSelectTaggingVisible = selectOptionList.length > 0;
 
+  const searchHabitListViaTags = () =>
+    dispatch(fetchHabitList({ tags: debouncedSearchingTag }));
+
   // fetch habit list via tagging
   useEffect(() => {
     if (seachViaTagHelper) {
-      dispatch(fetchHabitList({ tags: debouncedSearchingTag }));
+      searchHabitListViaTags();
     }
   }, [debouncedSearchingTag]);
 
@@ -109,10 +110,7 @@ const Habit = () => {
           className={classes.habitSkeleton}
         />
       ) : errorHabitList ? (
-        <div
-          className="error"
-          // onClick={() => fe({ tags: searchingTags })}
-        >
+        <div className="error" onClick={searchHabitListViaTags}>
           {errorHabitList}
         </div>
       ) : (

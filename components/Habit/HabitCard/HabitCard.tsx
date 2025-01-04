@@ -5,44 +5,36 @@ import Meta from "antd/lib/card/Meta";
 import classes from "./HabitCard.module.css";
 import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
 import { useRouter } from "next/router";
-import { PATHS } from "lib/nav/routes";
+import { ID_PARAM, PATHS } from "lib/nav/routes";
 
 const HabitCard = ({
   habit,
   difficultySettings,
-  setSelectedHabit,
   handleClick,
 }: HabitCardProps) => {
   const router = useRouter();
 
   const cardClickHandler = () => {
-    setSelectedHabit(habit);
-    router.push(PATHS.HABIT_EDIT.path);
+    const path = PATHS.HABIT_EDIT.path.replace(`:${ID_PARAM}`, habit.id);
+    router.push(path);
   };
 
   const difficultySetting = difficultySettings.find(
     (d) => d.code === habit.difficultyId
   );
 
-  const hitButtonClickHandler = () => {
-    const value = difficultySetting?.value || 0;
-    handleClick(value);
-  };
-
-  const difficultyAvatar = () => {
-    return difficultySetting?.image;
-  };
+  const difficultyAvatar = difficultySetting?.image;
 
   return (
     <div className={classes.cardContainer}>
       <Card hoverable onClick={cardClickHandler} title={habit.taskTitle}>
         <Meta
-          avatar={<Avatar src={difficultyAvatar()} />}
+          avatar={<Avatar src={difficultyAvatar} />}
           description={habit.notes}
         />
       </Card>
       <div className={classes.hitButton}>
-        <SimpleButton type="text" onClick={hitButtonClickHandler}>
+        <SimpleButton type="text" onClick={handleClick}>
           Crush It
         </SimpleButton>
       </div>

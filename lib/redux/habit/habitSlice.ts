@@ -4,14 +4,6 @@ import { RootState } from "../root/redux.types";
 import { HabitType } from "lib/types/habit.types";
 
 export const initialState: HabitState = {
-  selectedHabit: {
-    taskTitle: null,
-    notes: null,
-    difficultyId: null,
-    createdAt: null,
-    id: "",
-    tags: [],
-  },
   fetchHabitList: {
     isLoading: null,
     error: null,
@@ -27,9 +19,6 @@ const habitSlice = createSlice({
   name: "habit",
   initialState,
   reducers: {
-    setSelectedHabit(state, action: PayloadAction<HabitType>) {
-      state.selectedHabit = action.payload;
-    },
     fetchHabitListStart(state) {
       state.fetchHabitList.isLoading = true;
       state.fetchHabitList.error = null;
@@ -47,7 +36,6 @@ const habitSlice = createSlice({
 });
 
 export const {
-  setSelectedHabit,
   fetchHabitListStart,
   fetchHabitListErrored,
   fetchHabitListSucceeded,
@@ -56,8 +44,10 @@ export const {
 /**
  * Selectors
  */
-export const habitSelector = (state: RootState): HabitType =>
-  state.habit.selectedHabit;
+export const habitSelector =
+  (id: string) =>
+  (state: RootState): HabitType | undefined =>
+    state.habit.fetchHabitList.habitList.find((x) => x.id === id);
 
 export const habitListIsLoadingSelector = (state: RootState): boolean | null =>
   state.habit.fetchHabitList.isLoading;

@@ -5,6 +5,8 @@ const AUTH_PATH = "/auth";
 const HABIT_PATH = "/habit";
 //const REWARDS_PATH = "/reward";
 
+export const ID_PARAM = "id";
+
 export const PATHS: AppPaths = {
   HOME: {
     path: "/",
@@ -22,7 +24,7 @@ export const PATHS: AppPaths = {
     allowGoBackInHistory: true,
   },
   HABIT_EDIT: {
-    path: `${HABIT_PATH}/edit`,
+    path: `${HABIT_PATH}/edit/:${ID_PARAM}`,
     displayName: TITLES.EDIT,
     allowGoBackInHistory: true,
   },

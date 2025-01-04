@@ -1,3 +1,3 @@
-import habitSlice, { initialState, setSelectedHabit } from "./habitSlice";
+import habitSlice, { initialState } from "./habitSlice";
 
-export { habitSlice, initialState, setSelectedHabit };
+export { habitSlice, initialState };

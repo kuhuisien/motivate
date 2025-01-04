@@ -60,7 +60,7 @@ const CustomTagging = ({ tags, setTags }: CustomTaggingProps) => {
         value={inputValue}
         onChange={handleInputChange}
         onPressEnter={handleInputConfirm} // add tag on pressing Enter
-        placeholder="Add custom tags (enter tag and press enter)"
+        placeholder="Add custom tags (type and press enter)"
       />
 
       {/* Inline error messages */}

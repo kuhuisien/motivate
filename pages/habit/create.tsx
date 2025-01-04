@@ -21,7 +21,7 @@ const Create = () => {
 
   const dispatch = useDispatch();
 
-  const [tags, setTags] = useState<string[]>([]); // to track the list of tags
+  const [tags, setTags] = useState<string[]>([]);
 
   const { execute, status, error } = useMutateRequest(addHabit);
 
