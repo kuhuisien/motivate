@@ -12,17 +12,6 @@ import {
   REGISTER,
 } from "redux-persist";
 
-/**
- * @see https://redux-toolkit.js.org/usage/usage-with-typescript#correct-typings-for-the-dispatch-type
- */
-const middlewares = [...getDefaultMiddleware<RootState>()];
-
-const store = configureStore({
-  reducer: rootReducer,
-  middleware: middlewares,
-  devTools: process.env.NODE_ENV === "development",
-});
-
 const makeConfiguredStore = () =>
   configureStore({
     reducer: rootReducer,
