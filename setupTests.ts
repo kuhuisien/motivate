@@ -35,6 +35,7 @@ jest.mock("next/router", () => ({
     pathname: "/",
     back: jest.fn(),
     push: jest.fn(),
+    replace: jest.fn(),
   }),
 }));
 
@@ -54,3 +55,41 @@ jest.mock("next-auth/react", () => ({
   // mock hooks within unit test to avoid error message in console
   signOut: jest.fn(),
 }));
+
+// add mocking to avoid SVGElement referenceError in tests
+global.SVGElement = class SVGElement {
+  // Properties that are missing in your mock, which are part of the SVGElement interface
+  className: string;
+  ownerSVGElement: SVGElement | null;
+  viewportElement: SVGElement | null;
+  attributes: NamedNodeMap;
+
+  constructor() {
+    this.className = "";
+    this.ownerSVGElement = null;
+    this.viewportElement = null;
+    this.attributes = {} as NamedNodeMap;
+  }
+
+  // Optional: Mock any methods you need, such as event listeners
+  addEventListener() {}
+  removeEventListener() {}
+};
+
+let originalError: any;
+
+// ===================
+// mock console.error to avoid printing error on test console
+// ===================
+beforeAll(() => {
+  // Store the original console.error
+  originalError = console.error;
+
+  // Spy on console.error and mock its implementation to suppress errors
+  console.error = jest.fn();
+});
+
+afterAll(() => {
+  // Restore the original console.error
+  console.error = originalError;
+});

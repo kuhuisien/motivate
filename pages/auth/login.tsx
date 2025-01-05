@@ -48,7 +48,9 @@ const Login = () => {
       }
     } catch (error) {
       console.error(error);
-      setSubmitErrorMessage(error as string);
+      setSubmitErrorMessage(
+        typeof error === "string" ? error : "An error occured"
+      );
     } finally {
       setSubmitIsLoading(false);
     }

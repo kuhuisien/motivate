@@ -50,9 +50,13 @@ describe("HabitCard", () => {
   });
 
   // ====================
-  // BUTTON
+  // Click Handler
   // ====================
   it("should invoke onClick handler for Button without error", async () => {
     await userEvent.click(screen.getByRole("button"));
+  });
+
+  it("should invoke onClick handler for card without error", async () => {
+    await userEvent.click(screen.getByText("dummy title"));
   });
 });

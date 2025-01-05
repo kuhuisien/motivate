@@ -7,7 +7,6 @@ Aspiro is a motivation platform to help users set goals, track progress, and sta
 - **Habit Creation**: Easily add new goals to track your goals.
 - **Progress Tracking**: Receive encouraging pop-ups when you make progress or hit milestones.
 - **Tagging System**: Organize goals with tags for easy filtering and searching.
-- **Interactive 3D Box**: Clickable 3D box element to enhance user engagement.
 
 ## Tech Stack
 
@@ -55,8 +54,14 @@ Aspiro is a motivation platform to help users set goals, track progress, and sta
 
 ## Testing
 
-Run the test suite with:
+Run the test suite to ensure everthing works as expected:
 
 ```bash
 npm run test
+```
+
+Run the test suite to check test coverage:
+
+```bash
+npm run test:coverage
 ```
