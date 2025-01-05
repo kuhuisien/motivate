@@ -1,5 +1,5 @@
-export const PROJECT_BASE_URL = process.env.NEXTAUTH_URL
-  ? process.env.NEXTAUTH_URL
+export const PROJECT_BASE_URL = process.env.VERCEL_URL
+  ? process.env.VERCEL_URL
   : process.env.NEXT_PUBLIC_URL;
 
 export const API_BASE_URL = `${PROJECT_BASE_URL}/api`;
