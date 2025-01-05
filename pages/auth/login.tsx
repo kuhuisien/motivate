@@ -15,6 +15,7 @@ const Login = () => {
   // prevent logged in user to access the page
   const { data: session, status } = useSession();
   useEffect(() => {
+    console.log("debugging: ", session);
     if (session) {
       router.replace(PATHS.HOME.path);
     }
