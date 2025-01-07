@@ -1,4 +1,3 @@
-import React from "react";
 import { RadioButtonProps, RadioType as RadioType } from "../RadioButton.types";
 import RadioButton from "../RadioButton";
 import { FormProvidersWrapper } from "lib/TestUtil/ProviderWrapper/FormProviderWrapper";

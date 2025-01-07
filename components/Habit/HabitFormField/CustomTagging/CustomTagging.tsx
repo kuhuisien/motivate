@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import * as React from "react";
 import { Input, Tag, Typography } from "antd";
 import styles from "./CustomTagging.module.css";
 import { CustomTaggingProps } from "./CustomTagging.types";

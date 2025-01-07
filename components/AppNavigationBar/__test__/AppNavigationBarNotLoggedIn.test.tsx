@@ -1,4 +1,3 @@
-import React from "react";
 import AppNavigationBar from "../AppNavigationBar";
 import { render, screen } from "@testing-library/react";
 

@@ -1,4 +1,3 @@
-import React from "react";
 import { HabitFormFieldProps } from "./HabitFormField.types";
 import { RadioType } from "components/FormInputs/RadioButton/RadioButton.types";
 import classes from "./HabitFormField.module.css";

@@ -1,4 +1,3 @@
-import React from "react";
 import { Form } from "antd";
 import { SubmitButtonProps } from "./SubmitButton.types";
 import SimpleButton from "../SimpleButton/SimpleButton";

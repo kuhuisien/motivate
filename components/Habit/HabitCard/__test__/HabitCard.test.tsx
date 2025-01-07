@@ -1,4 +1,3 @@
-import React from "react";
 import { HabitCardProps } from "../HabitCard.types";
 import { DIFFICULTY_ID } from "../constant";
 import HabitCard from "../HabitCard";

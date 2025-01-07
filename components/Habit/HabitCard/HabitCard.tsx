@@ -1,4 +1,3 @@
-import React from "react";
 import { Card, Avatar } from "antd";
 import { HabitCardProps } from "./HabitCard.types";
 import Meta from "antd/lib/card/Meta";

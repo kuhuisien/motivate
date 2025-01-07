@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import classes from "styles/Signup.module.css";
 import { Form, Typography } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";

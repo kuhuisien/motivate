@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { Form, Input, Typography } from "antd";
 import { TextFieldProps } from "./TextField.types";
 import { Rule } from "antd/lib/form";

@@ -1,4 +1,3 @@
-import React from "react";
 import { Radio, Form } from "antd";
 import { RadioButtonProps } from "./RadioButton.types";
 import classes from "./RadioButton.module.css";

@@ -1,4 +1,3 @@
-import React from "react";
 import { Typography } from "antd";
 import { RollbackOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";

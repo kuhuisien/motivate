@@ -1,4 +1,3 @@
-import React from "react";
 import { SimpleButtonProps } from "../SimpleButton.types";
 import SimpleButton from "../SimpleButton";
 import { render, screen } from "@testing-library/react";

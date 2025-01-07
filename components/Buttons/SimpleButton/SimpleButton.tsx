@@ -1,4 +1,3 @@
-import React from "react";
 import { SimpleButtonProps } from "./SimpleButton.types";
 import { Button } from "antd";
 import classes from "./SimpleButton.module.css";

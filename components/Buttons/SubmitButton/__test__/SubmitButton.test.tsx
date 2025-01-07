@@ -1,4 +1,3 @@
-import React from "react";
 import { SubmitButtonProps } from "../SubmitButton.types";
 import SubmitButton from "../SubmitButton";
 import { FormProvidersWrapper } from "lib/TestUtil/ProviderWrapper/FormProviderWrapper";
