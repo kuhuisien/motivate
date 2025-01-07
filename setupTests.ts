@@ -74,22 +74,4 @@ global.SVGElement = class SVGElement {
   // Optional: Mock any methods you need, such as event listeners
   addEventListener() {}
   removeEventListener() {}
-};
-
-let originalError: any;
-
-// ===================
-// mock console.error to avoid printing error on test console
-// ===================
-beforeAll(() => {
-  // Store the original console.error
-  originalError = console.error;
-
-  // Spy on console.error and mock its implementation to suppress errors
-  console.error = jest.fn();
-});
-
-afterAll(() => {
-  // Restore the original console.error
-  console.error = originalError;
-});
+} as any;

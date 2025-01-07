@@ -1,6 +1,16 @@
 import { handleError } from "../handleError";
 
 describe("Parse Axios error", () => {
+  let consoleSpy: jest.SpyInstance;
+
+  beforeEach(() => {
+    consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    consoleSpy.mockRestore();
+  });
+
   it("should parse error", () => {
     const mockAxiosError = {
       isAxiosError: true,

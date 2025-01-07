@@ -20,12 +20,18 @@ const AppNavigationBar = () => {
 
   const showBackButton = path?.allowGoBackInHistory;
   const goBack = () => router.back();
+  const onClickSignOutButton = () => signOut();
 
   return (
     <div className={classes.header}>
       {showBackButton && (
         <div className={classes.backButtonContainer}>
-          <SimpleButton withBorder={false} type="default" onClick={goBack}>
+          <SimpleButton
+            aria-label="Go back"
+            withBorder={false}
+            type="default"
+            onClick={goBack}
+          >
             <RollbackOutlined className={classes.backButton} />
           </SimpleButton>
         </div>
@@ -37,7 +43,7 @@ const AppNavigationBar = () => {
 
       {session && (
         <div className={classes.logoutButton}>
-          <SimpleButton onClick={() => signOut()}>Logout</SimpleButton>
+          <SimpleButton onClick={onClickSignOutButton}>Logout</SimpleButton>
         </div>
       )}
     </div>
