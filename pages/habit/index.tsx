@@ -134,7 +134,7 @@ const Habit = ({ tagList = [], habitListResOnLoad }: HabitProps) => {
         </div>
       )}
 
-      {hasMore && (
+      {!isReloadingHabitList && hasMore && (
         <div ref={habitListEndRef} className={classes.loadMore}>
           Load more...
         </div>

@@ -1,6 +1,6 @@
+import { Path } from "lib/nav/path.types";
+import { PATHS } from "lib/nav/routes";
 import { useMemo } from "react";
-import { Path } from "../../nav/path.types";
-import { PATHS } from "../../nav/routes";
 
 /**
  * Finds and retrieves the Path of a particular path string value from global application
@@ -23,7 +23,12 @@ const useRetrievePath = (path: string): Path | null => {
     return pathObj;
   }, []);
 
-  return memoPathObj[path];
+  const toReturn = memoPathObj[path];
+  if (!toReturn) {
+    return null;
+  }
+
+  return toReturn;
 };
 
 export { useRetrievePath };

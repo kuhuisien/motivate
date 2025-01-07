@@ -4,7 +4,7 @@ import { RollbackOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
 import { signOut, useSession } from "next-auth/react";
-import { useRetrievePath } from "lib/hooks/common/useRetrievePath";
+import { useRetrievePath } from "lib/hooks/common/useRetrivePath/useRetrievePath";
 import classes from "./AppNavigationBar.module.css";
 
 const APP_NAME = "Aspiro";
