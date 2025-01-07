@@ -12,6 +12,7 @@ import {
   OK_SUCCESS_STATUS_CODE,
   SUCCESS_MESSAGE,
   DELETE,
+  GET,
 } from "lib/api/server/constant";
 import { GeneralResponse } from "lib/types/common/data.types";
 import { HabitType } from "lib/types/habit.types";
@@ -22,7 +23,7 @@ import { HABITS_COLLECTION } from "lib/firebase/constant";
 
 async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<GeneralResponse>
+  res: NextApiResponse<GeneralResponse | HabitType>
 ) {
   try {
     const {
@@ -92,6 +93,12 @@ async function handler(
         case DELETE:
           await habitRef.delete();
           res.status(OK_SUCCESS_STATUS_CODE).json({ message: SUCCESS_MESSAGE });
+          return;
+
+        case GET:
+          res
+            .status(OK_SUCCESS_STATUS_CODE)
+            .json({ ...habitData } as HabitType);
           return;
 
         default:

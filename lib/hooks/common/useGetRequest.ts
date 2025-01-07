@@ -3,7 +3,7 @@ import { useState, useCallback, useEffect } from "react";
 export const useGetRequest = <T, E = string, P = undefined>(
   asyncFunction: (requestParam: P) => Promise<T>,
   immediate = true,
-  firstlyRequestParam: P
+  firstlyRequestParam?: P
 ) => {
   const [status, setStatus] = useState<
     "idle" | "pending" | "success" | "error"
@@ -35,7 +35,7 @@ export const useGetRequest = <T, E = string, P = undefined>(
   // Otherwise execute can be called later, such as
   // in an onClick handler.
   useEffect(() => {
-    if (immediate) {
+    if (immediate && firstlyRequestParam) {
       execute(firstlyRequestParam);
     }
   }, [execute, immediate]);

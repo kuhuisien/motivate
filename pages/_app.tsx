@@ -1,4 +1,3 @@
-import "../styles/globals.css";
 import { Layout } from "antd";
 import AppNavigationBar from "../components/AppNavigationBar/AppNavigationBar";
 import { AppProps } from "next/app";
@@ -12,6 +11,7 @@ import Head from "next/head";
 import { useRef } from "react";
 import { AppStore } from "lib/redux/root/redux.types";
 import { Persistor, persistStore } from "redux-persist";
+import "../styles/globals.css";
 
 initializeFirebase();
 
@@ -42,7 +42,7 @@ function MyApp({ Component, pageProps }: Props) {
             <Header className="header">
               <AppNavigationBar />
             </Header>
-            <Content className="content">
+            <Content>
               <Component {...pageProps} />
             </Content>
           </Layout>

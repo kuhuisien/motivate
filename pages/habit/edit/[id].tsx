@@ -1,38 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
-import { Form, Typography } from "antd";
-import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
-import { ID_PARAM, PATHS } from "lib/nav/routes";
-import classes from "styles/HabitEdit.module.css";
-import { useDispatch, useSelector } from "react-redux";
-import { habitSelector } from "lib/redux/habit/habitSlice";
-import { formFieldNames } from "components/Habit/HabitFormField/HabitFormField";
-import { Modal } from "antd";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { updateHabit } from "lib/api/client/habit/UpdateHabit/updateHabit";
 import { useRouter } from "next/router";
-import SubmitButton from "components/Buttons/SubmitButton/SubmitButton";
-import { deleteHabit } from "lib/api/client/habit/DeleteHabit/deleteHabit";
-import HabitFormFieldContainer from "components/Habit/HabitFormField/HabitFormFieldContainer";
-import { useMutateRequest } from "lib/hooks/useMutationRequest";
-import { fetchHabitList } from "lib/redux/habit/habitThunk";
 import { useParams } from "next/navigation";
+import { Form, Typography, Modal } from "antd";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { ID_PARAM, PATHS } from "lib/nav/routes";
+import { getCookieFromContext } from "lib/api/server/util";
+import { getHabit } from "lib/api/client/habit/GetHabit/getHabit";
+import { updateHabit } from "lib/api/client/habit/UpdateHabit/updateHabit";
+import { deleteHabit } from "lib/api/client/habit/DeleteHabit/deleteHabit";
+import { useMutateRequest } from "lib/hooks/common/useMutationRequest";
+import HabitFormFieldContainer from "components/Habit/HabitFormField/HabitFormFieldContainer";
+import SubmitButton from "components/Buttons/SubmitButton/SubmitButton";
+import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
+import { formFieldNames } from "components/Habit/HabitFormField/HabitFormField";
+import { HabitType } from "lib/types/habit.types";
+import classes from "styles/HabitEdit.module.css";
+
+interface HabitProps {
+  habit: HabitType;
+}
 
 const { confirm } = Modal;
 
-const Edit = () => {
-  const dispatch = useDispatch();
-
+const Edit = ({ habit }: HabitProps) => {
   const params = useParams<{ id: string }>();
 
   const habitId = params[ID_PARAM];
 
-  const habitState = useSelector(habitSelector(habitId));
-
   const router = useRouter();
 
-  const [tags, setTags] = useState<string[]>(habitState?.tags || []);
+  const [tags, setTags] = useState<string[]>(habit?.tags || []);
 
   const {
     execute: editExecute,
@@ -60,7 +59,7 @@ const Edit = () => {
         difficultyId: difficulty,
         tags,
       },
-      { id: habitState?.id }
+      { id: habitId }
     );
   };
 
@@ -69,14 +68,13 @@ const Edit = () => {
       title: "Are you sure to delete?",
       icon: <ExclamationCircleOutlined />,
       async onOk() {
-        await deleteExecute(undefined, { id: habitState?.id });
+        await deleteExecute(undefined, { id: habitId });
       },
       onCancel() {},
     });
   }
   useEffect(() => {
     if (editStatus === "success" || deleteStatus === "success") {
-      dispatch(fetchHabitList());
       router.replace(PATHS.HABIT.path);
     }
   }, [editStatus, deleteStatus]);
@@ -85,7 +83,7 @@ const Edit = () => {
     <div className={classes.container}>
       <Form form={form} onFinish={onFinish} onFinishFailed={onFinish}>
         <HabitFormFieldContainer
-          habitState={habitState}
+          habitState={habit}
           tags={tags}
           setTags={setTags}
         ></HabitFormFieldContainer>
@@ -123,8 +121,27 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const cookie = getCookieFromContext(context);
+
+  const id = context.params?.id as string;
+
+  if (!id) {
+    return {
+      notFound: true,
+    };
+  }
+
+  try {
+    var habit = await getHabit(id, cookie);
+  } catch (error) {
+    console.error(error);
+    return {
+      notFound: true,
+    };
+  }
+
   return {
-    props: {},
+    props: { habit },
   };
 };
 

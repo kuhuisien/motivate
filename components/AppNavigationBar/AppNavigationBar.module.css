@@ -5,9 +5,8 @@
 }
 
 .backButtonContainer {
-  border: 0;
   position: absolute;
-  left: 8px;
+  left: 15px;
 }
 
 .backButton {

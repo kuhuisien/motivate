@@ -1,16 +1,13 @@
-import classes from "styles/Home.module.css";
 import React, { useEffect } from "react";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { PATHS } from "lib/nav/routes";
 import { useRouter } from "next/router";
 import { getSystemSettings } from "lib/api/client/systemSetting/GetSystemSetting/GetSystemSetting";
+import { useGetSystemSettings } from "lib/hooks/useGetSystemSettings";
 import Cube from "components/Cube/Cube";
 import { SystemSetting } from "lib/types/systemSetting.types";
-import { useGetSystemSettings } from "lib/hooks/useGetSystemSettings";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchHabitList } from "lib/redux/habit/habitThunk";
-import { habitListIsLoadingSelector } from "lib/redux/habit/habitSlice";
+import classes from "styles/Home.module.css";
 
 interface HomeProps {
   difficultySystemSettings: SystemSetting[];
@@ -19,21 +16,16 @@ interface HomeProps {
 const Home = ({ difficultySystemSettings }: HomeProps) => {
   const router = useRouter();
 
-  const dispatch = useDispatch();
-
-  const isLoading = useSelector(habitListIsLoadingSelector);
-
   // save system settings to redux state
   useGetSystemSettings(difficultySystemSettings);
 
+  // retain on the page for visual experience only
   useEffect(() => {
-    if (isLoading === null) {
-      dispatch(fetchHabitList());
-    }
-    if (isLoading === false) {
+    const timer = setTimeout(() => {
+      clearTimeout(timer);
       router.replace(PATHS.HABIT.path);
-    }
-  }, [isLoading]);
+    });
+  }, [2000]);
 
   return (
     <div className={classes.container}>

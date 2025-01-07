@@ -5,26 +5,21 @@ import { getRequestOptions } from "../../resource/configs/requests";
 import { parseResponse } from "../../resource/handlers/parseResponse/parseResponse";
 import { handleError } from "../../resource/handlers/handleError/handleError";
 
-export interface getHabitsInput {
-  tags?: string[];
-  pageNumber?: number;
-  pageSize?: number;
-}
-
-const getHabits = async (
-  inputs?: getHabitsInput,
+const getHabit = async (
+  id: string,
   cookie?: string
 ): Promise<HabitListingResponseType> => {
   try {
-    const { tags, pageNumber = 1, pageSize = 5 } = inputs || {};
-    const response = await axios.get<HabitListingResponseType>(GET_HABITS_URL, {
-      ...getRequestOptions(cookie),
-      params: { tags, pageNumber, pageSize },
-    });
+    const response = await axios.get<HabitListingResponseType>(
+      `${GET_HABITS_URL}/${id}`,
+      {
+        ...getRequestOptions(cookie),
+      }
+    );
     return parseResponse(response, GET_HABITS_URL);
   } catch (error) {
     return handleError(error);
   }
 };
 
-export { getHabits };
+export { getHabit };

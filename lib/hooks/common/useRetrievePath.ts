@@ -1,5 +1,6 @@
-import { Path } from "./path.types";
-import { PATHS } from "./routes";
+import { useMemo } from "react";
+import { Path } from "../../nav/path.types";
+import { PATHS } from "../../nav/routes";
 
 /**
  * Finds and retrieves the Path of a particular path string value from global application
@@ -11,22 +12,18 @@ import { PATHS } from "./routes";
  * @param {string} path  Sub-path from the base URL
  * @returns {Path | null}  The Path object for this input, NULL otherwise.
  */
-const retrievePath = (path: string): Path | null => {
-  if (!path) {
-    return null;
-  } else {
-    let exactPath: Path | null = null;
-
-    for (let key in PATHS) {
-      let keyPath = PATHS[key];
-      if (keyPath.path === path) {
-        exactPath = keyPath;
-        break;
-      }
+const useRetrievePath = (path: string): Path | null => {
+  const memoPathObj = useMemo(() => {
+    const pathObj: Record<string, Path> = {};
+    for (const key in PATHS) {
+      const path = PATHS[key];
+      const pKey = path.path;
+      pathObj[pKey] = path;
     }
+    return pathObj;
+  }, []);
 
-    return exactPath;
-  }
+  return memoPathObj[path];
 };
 
-export { retrievePath };
+export { useRetrievePath };

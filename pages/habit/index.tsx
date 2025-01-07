@@ -3,37 +3,30 @@ import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { Skeleton, Select } from "antd";
-import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
-import { PATHS } from "lib/nav/routes";
-import classes from "styles/Habit.module.css";
-import HabitCardContainer from "components/Habit/HabitCard/HabitCardContainer";
-import { useGetRequest } from "lib/hooks/useGetRequest";
-import { getTags } from "lib/api/client/tag/GetTags/getTags";
 import { useDebounce } from "use-debounce";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  habitListIsLoadingSelector,
-  habitListErrorSelector,
-  habitListSelector,
-  habitListHasMoreSelector,
-} from "lib/redux/habit/habitSlice";
-import { fetchHabitList, fetchMoreHabitList } from "lib/redux/habit/habitThunk";
+import { PATHS } from "lib/nav/routes";
+import { getCookieFromContext } from "lib/api/server/util";
+import { getHabits } from "lib/api/client/habit/GetHabits/getHabits";
+import { getTags } from "lib/api/client/tag/GetTags/getTags";
+import { useGetHabits } from "lib/hooks/useGetHabits";
+import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
+import HabitCardContainer from "components/Habit/HabitCard/HabitCardContainer";
+import { HabitListingResponseType } from "lib/types/habit.types";
+import classes from "styles/Habit.module.css";
 
 const INTERCEPTION_OBSERVER_OPTION = {
   threshold: 0.8,
 };
 
-const Habit = () => {
+interface HabitProps {
+  tagList: string[];
+  habitListResOnLoad: HabitListingResponseType;
+}
+
+const Habit = ({ tagList = [], habitListResOnLoad }: HabitProps) => {
   const habitListEndRef = useRef<HTMLDivElement | null>(null);
 
   const router = useRouter();
-
-  const dispatch = useDispatch();
-
-  const habitList = useSelector(habitListSelector);
-  const isLoadingHabitList = useSelector(habitListIsLoadingSelector);
-  const errorHabitList = useSelector(habitListErrorSelector);
-  const hasMore = useSelector(habitListHasMoreSelector);
 
   const [searchingTags, setSearchingTags] = useState<string[]>([]);
   const [seachViaTagHelper, setSearchViaTagHelper] = useState(false);
@@ -45,22 +38,29 @@ const Habit = () => {
 
   const [debouncedSearchingTag] = useDebounce(searchingTags, 1000);
 
-  const { value: getTagsValue } = useGetRequest(getTags, true, undefined);
+  const {
+    habitList,
+    isReloadingHabitList,
+    errorReloadHabitList,
+    hasMore,
+    reloadHabitList,
+    appendHabitList,
+  } = useGetHabits({
+    habitListResOnLoad,
+    tags: debouncedSearchingTag,
+  });
 
   const selectOptionList =
-    getTagsValue?.tagList.map((x) => {
+    tagList.map((x) => {
       return { label: x, value: x };
     }) || [];
 
   const isSelectTaggingVisible = selectOptionList.length > 0;
 
-  const searchHabitListViaTags = () =>
-    dispatch(fetchHabitList({ tags: debouncedSearchingTag }));
-
   // fetch habit list via tagging
   useEffect(() => {
     if (seachViaTagHelper) {
-      searchHabitListViaTags();
+      reloadHabitList();
     }
   }, [debouncedSearchingTag]);
 
@@ -83,16 +83,15 @@ const Habit = () => {
 
   const observerCallback: IntersectionObserverCallback = (entries) => {
     entries.forEach((x) => {
-      console.log(x);
       if (x.isIntersecting) {
-        dispatch(fetchMoreHabitList({ tags: debouncedSearchingTag }));
+        appendHabitList();
       }
     });
   };
 
   return (
     <div className={classes.container}>
-      {!isLoadingHabitList && habitList.length === 0 && (
+      {!isReloadingHabitList && habitList.length === 0 && (
         <div className={classes.emptyMsgContainer}>
           No item yet, create today!
         </div>
@@ -118,15 +117,11 @@ const Habit = () => {
         />
       )}
 
-      {isLoadingHabitList ? (
-        <Skeleton
-          active
-          paragraph={{ rows: 8 }}
-          className={classes.habitSkeleton}
-        />
-      ) : errorHabitList ? (
-        <div className="error" onClick={searchHabitListViaTags}>
-          {errorHabitList}
+      {isReloadingHabitList ? (
+        <Skeleton />
+      ) : errorReloadHabitList ? (
+        <div className="error" onClick={reloadHabitList}>
+          {errorReloadHabitList}
         </div>
       ) : (
         <div>
@@ -159,8 +154,31 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  var tagList: string[] = [];
+  const cookie = getCookieFromContext(context);
+
+  try {
+    const tagsResponse = await getTags(cookie);
+    tagList = tagsResponse.tagList;
+  } catch (error) {
+    console.error(error);
+  }
+
+  try {
+    var habitListResOnLoad = await getHabits(undefined, cookie);
+  } catch (error) {
+    console.error(error);
+    return {
+      notFound: true,
+    };
+  }
+
   return {
-    props: {},
+    props: {
+      tagList,
+      habitListResOnLoad,
+    },
   };
 };
+
 export default Habit;

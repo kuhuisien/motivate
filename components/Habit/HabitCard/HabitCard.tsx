@@ -5,7 +5,7 @@ import Meta from "antd/lib/card/Meta";
 import classes from "./HabitCard.module.css";
 import SimpleButton from "components/Buttons/SimpleButton/SimpleButton";
 import { useRouter } from "next/router";
-import { ID_PARAM, PATHS } from "lib/nav/routes";
+import { ID_PLACEHOLDER, PATHS } from "lib/nav/routes";
 import { notification } from "antd";
 
 const MESSAGES = [
@@ -20,7 +20,7 @@ const HabitCard = ({ habit, difficultySettings }: HabitCardProps) => {
   const router = useRouter();
 
   const cardClickHandler = () => {
-    const path = PATHS.HABIT_EDIT.path.replace(`:${ID_PARAM}`, habit.id);
+    const path = PATHS.HABIT_EDIT.path.replace(ID_PLACEHOLDER, habit.id);
     router.push(path);
   };
 

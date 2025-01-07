@@ -3,10 +3,19 @@
  *
  * @returns {Object} Axios compatible HTTP header object
  */
-const getRequestOptions = () => {
-  return {
-    timeout: 30000,
-  };
+const getRequestOptions = (cookie?: string) => {
+  if (cookie) {
+    return {
+      timeout: 30000,
+      headers: {
+        Cookie: cookie,
+      },
+    };
+  } else {
+    return {
+      timeout: 30000,
+    };
+  }
 };
 
 export { getRequestOptions };

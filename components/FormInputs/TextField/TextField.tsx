@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Form, Input, Typography } from "antd";
 import { TextFieldProps } from "./TextField.types";
 import { Rule } from "antd/lib/form";
@@ -20,7 +20,7 @@ const TextField = ({
   defaultValue,
 }: TextFieldProps) => {
   // create validation rules
-  const createRules = () => {
+  const rules = useMemo(() => {
     var rules: Rule[] = [];
     var message;
     if (required) {
@@ -63,14 +63,22 @@ const TextField = ({
       });
     }
     return rules;
-  };
+  }, [
+    required,
+    requiredValMsg,
+    name,
+    pattern,
+    patternValMsg,
+    dependency,
+    type,
+  ]);
 
   return (
     <div>
       {label && <Typography.Text>{label}</Typography.Text>}
       <Form.Item
         name={name}
-        rules={createRules()}
+        rules={rules}
         initialValue={defaultValue}
         dependencies={dependency ? [dependency] : []}
         style={{ width: 313 }}

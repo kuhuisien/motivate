@@ -5,6 +5,7 @@ type Habit = {
   taskTitle: string | null;
   notes: string | null;
   difficultyId: string | null;
+  tags: string[];
 };
 
 // Habit Item structure in db
@@ -17,7 +18,6 @@ export type HabitDbRecordType = Habit & {
 export type HabitType = Habit & {
   createdAt: string | null;
   id: string;
-  tags: string[];
 };
 
 export type PaginationType = {
