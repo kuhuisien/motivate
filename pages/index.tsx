@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { PATHS } from "lib/nav/routes";
@@ -8,6 +8,7 @@ import { useGetSystemSettings } from "lib/hooks/useGetSystemSettings";
 import Cube from "components/Cube/Cube";
 import { SystemSetting } from "lib/types/systemSetting.types";
 import classes from "styles/Home.module.css";
+import { SYSTEM_SETTING_CODE } from "lib/constants";
 
 interface HomeProps {
   difficultySystemSettings: SystemSetting[];
@@ -48,7 +49,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   try {
     var difficultySystemSettingsResponse = await getSystemSettings(undefined, {
-      category: "DIFFICULTY",
+      category: SYSTEM_SETTING_CODE.DIFFICULTY,
     });
   } catch (error) {
     console.error(error);
